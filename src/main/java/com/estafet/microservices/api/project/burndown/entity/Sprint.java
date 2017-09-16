@@ -8,6 +8,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @Entity
 @Table(name = "PROJECT_BURN_SPRINT")
@@ -23,6 +25,7 @@ public class Sprint {
 	@Column(name = "POINTS_TOTAL")
 	private Integer pointsTotal = 0;
 
+	@JsonInclude(Include.NON_NULL)
 	private String status;
 
 	@JsonIgnore
