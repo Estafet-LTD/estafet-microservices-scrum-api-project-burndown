@@ -8,35 +8,28 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.estafet.microservices.api.project.burndown.dao.ProjectBurndownDAO;
 import com.estafet.microservices.api.project.burndown.entity.Project;
-import com.estafet.microservices.api.project.burndown.entity.Sprint;
-import com.estafet.microservices.api.project.burndown.service.ProjectBurndownService;
+import com.estafet.microservices.api.project.burndown.message.Story;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Component(value = "sprintConsumer")
-public class CompletedSprintConsumer {
+@Component(value = "storyConsumer")
+public class NewStoryConsumer {
 
 	@Autowired
 	private ProjectBurndownDAO projectBurndownDAO;
-
-	@Autowired
-	private ProjectBurndownService projectBurndownService;
-
+		
 	@Transactional
 	public void onMessage(String message) {
 		try {
-			
 			ObjectMapper mapper = new ObjectMapper();
-			Sprint sprint = mapper.readValue(message, Sprint.class);
-
-			Project project = projectBurndownService.getSprintProject(sprint.getId());
-			sprint.setPointsTotal(projectBurndownService.getStoryPointsTotal(project.getId()));
-			project.addSprint(sprint);
-
-			projectBurndownDAO.update(project);
-
-		} catch (IOException e) {
+			Story story  = mapper.readValue(message, Story.class);
+			Project project = projectBurndownDAO.getProjectBurndown(story.getProjectId());
+			if (project == null) {
+				project = new Project().setId(story.getProjectId());
+			}
+			projectBurndownDAO.create(project.addStory(story));
+		} catch (IOException  e) {
 			throw new RuntimeException(e);
-		}
+		} 
 	}
-
+	
 }

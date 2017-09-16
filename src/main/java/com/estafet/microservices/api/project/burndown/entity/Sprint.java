@@ -23,6 +23,8 @@ public class Sprint {
 	@Column(name = "POINTS_TOTAL")
 	private Integer pointsTotal;
 
+	private String status;
+
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "PROJECT_ID", referencedColumnName = "PROJECT_ID")
@@ -42,6 +44,14 @@ public class Sprint {
 
 	public Integer getPointsTotal() {
 		return pointsTotal;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public Sprint setId(Integer id) {

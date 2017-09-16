@@ -29,7 +29,7 @@
 
 	<jms:listener-container connection-factory="pooledJmsConnectionFactory"
 		acknowledge="auto" destination-type="topic">
-		<jms:listener destination="completed.sprint.topic" ref="sprintConsumer"
+		<jms:listener destination="update.sprint.topic" ref="sprintConsumer"
 			method="onMessage" />
 	</jms:listener-container>
 	
