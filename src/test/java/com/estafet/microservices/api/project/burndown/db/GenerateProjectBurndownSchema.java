@@ -3,7 +3,7 @@ package com.estafet.microservices.api.project.burndown.db;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 
-public class GenerateSprintBurndownSchema {
+public class GenerateProjectBurndownSchema {
 
 	public static void main(String[] args) {
 		final String persistenceUnitName = "build";

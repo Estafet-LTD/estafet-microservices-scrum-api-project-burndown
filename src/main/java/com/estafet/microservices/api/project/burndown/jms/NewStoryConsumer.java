@@ -24,7 +24,9 @@ public class NewStoryConsumer {
 			Story story  = mapper.readValue(message, Story.class);
 			Project project = projectBurndownDAO.getProjectBurndown(story.getProjectId());
 			if (project == null) {
-				project = new Project().setId(story.getProjectId());
+				project = new Project();
+				project.setId(story.getProjectId());
+				project.start();
 			}
 			projectBurndownDAO.create(project.addStory(story));
 		} catch (IOException  e) {

@@ -31,8 +31,10 @@ public class Project {
 	@OneToMany(mappedBy = "sprintProject", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Sprint> sprints = new HashSet<Sprint>();
 
-	public Project() {
+	
+	public Project start() {
 		addSprint(new Sprint().setId(0).setNumber(0));
+		return this;
 	}
 
 	public Project addStory(Story story) {
@@ -50,9 +52,8 @@ public class Project {
 		return id;
 	}
 
-	public Project setId(int id) {
+	public void setId(int id) {
 		this.id = id;
-		return this;
 	}
 
 	private Sprint getLastestSprint() {

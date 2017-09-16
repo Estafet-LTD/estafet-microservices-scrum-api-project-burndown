@@ -1,5 +1,8 @@
 package com.estafet.microservices.api.project.burndown.message;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Story {
 
 	private int id;
