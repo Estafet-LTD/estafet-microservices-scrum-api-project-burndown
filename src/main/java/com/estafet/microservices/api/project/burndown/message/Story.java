@@ -1,4 +1,4 @@
-package com.estafet.microservices.api.project.burndown.entity;
+package com.estafet.microservices.api.project.burndown.message;
 
 public class Story {
 

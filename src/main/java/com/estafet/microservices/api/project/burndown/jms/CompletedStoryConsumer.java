@@ -4,18 +4,20 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.estafet.microservices.api.project.burndown.dao.ProjectBurndownDAO;
 import com.estafet.microservices.api.project.burndown.entity.Project;
-import com.estafet.microservices.api.project.burndown.entity.Story;
+import com.estafet.microservices.api.project.burndown.message.Story;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component(value = "storyConsumer")
-public class StoryConsumer {
+public class CompletedStoryConsumer {
 
 	@Autowired
 	private ProjectBurndownDAO projectBurndownDAO;
 		
+	@Transactional
 	public void onMessage(String message) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -24,7 +26,7 @@ public class StoryConsumer {
 			if (project == null) {
 				project = new Project().setId(story.getProjectId());
 			}
-			projectBurndownDAO.updateProjectBurndown(project.addStory(story));
+			projectBurndownDAO.create(project.addStory(story));
 		} catch (IOException  e) {
 			throw new RuntimeException(e);
 		} 

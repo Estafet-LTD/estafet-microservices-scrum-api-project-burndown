@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.estafet.microservices.api.project.burndown.entity.Project;
-import com.estafet.microservices.api.project.burndown.entity.Story;
+import com.estafet.microservices.api.project.burndown.message.Story;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

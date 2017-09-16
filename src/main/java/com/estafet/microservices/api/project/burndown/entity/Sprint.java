@@ -44,8 +44,22 @@ public class Sprint {
 		return pointsTotal;
 	}
 
-	public Sprint setPointsTotal(Integer pointsTotal) {
+	public Sprint setId(Integer id) {
+		this.id = id;
+		return this;
+	}
+
+	public Sprint setNumber(Integer number) {
+		this.number = number;
+		return this;
+	}
+
+	public void setPointsTotal(Integer pointsTotal) {
 		this.pointsTotal = pointsTotal;
+	}
+
+	public Sprint incrementPoints(int points) {
+		pointsTotal += points;
 		return this;
 	}
 

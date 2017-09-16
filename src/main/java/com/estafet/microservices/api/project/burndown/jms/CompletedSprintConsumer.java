@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.estafet.microservices.api.project.burndown.dao.ProjectBurndownDAO;
 import com.estafet.microservices.api.project.burndown.entity.Project;
@@ -12,7 +13,7 @@ import com.estafet.microservices.api.project.burndown.service.ProjectBurndownSer
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component(value = "sprintConsumer")
-public class SprintConsumer {
+public class CompletedSprintConsumer {
 
 	@Autowired
 	private ProjectBurndownDAO projectBurndownDAO;
@@ -20,8 +21,10 @@ public class SprintConsumer {
 	@Autowired
 	private ProjectBurndownService projectBurndownService;
 
+	@Transactional
 	public void onMessage(String message) {
 		try {
+			
 			ObjectMapper mapper = new ObjectMapper();
 			Sprint sprint = mapper.readValue(message, Sprint.class);
 
@@ -29,7 +32,7 @@ public class SprintConsumer {
 			sprint.setPointsTotal(projectBurndownService.getStoryPointsTotal(project.getId()));
 			project.addSprint(sprint);
 
-			projectBurndownDAO.updateProjectBurndown(project);
+			projectBurndownDAO.update(project);
 
 		} catch (IOException e) {
 			throw new RuntimeException(e);

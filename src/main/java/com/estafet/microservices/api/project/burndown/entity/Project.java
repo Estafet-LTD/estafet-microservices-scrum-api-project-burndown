@@ -15,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.estafet.microservices.api.project.burndown.message.Story;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -24,20 +26,20 @@ public class Project {
 	@Id
 	@Column(name = "PROJECT_ID")
 	private int id;
-	
-	@Column(name = "STARTING_TOTAL_STORY_POINTS")
-	private int startingTotalStoryPoints;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "sprintProject", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Sprint> sprints = new HashSet<Sprint>();
-	
+
+	public Project() {
+		addSprint(new Sprint().setId(0).setNumber(0));
+	}
+
 	public Project addStory(Story story) {
-		if (sprints.isEmpty()) {
-			startingTotalStoryPoints += story.getStorypoints();
-		}
+		addSprint(getLastestSprint().incrementPoints(story.getStorypoints()));
 		return this;
 	}
-	
+
 	public Project addSprint(Sprint sprint) {
 		sprint.setSprintProject(this);
 		sprints.add(sprint);
@@ -53,6 +55,10 @@ public class Project {
 		return this;
 	}
 
+	private Sprint getLastestSprint() {
+		return getSprints().get(0);
+	}
+
 	@JsonProperty("sprints")
 	public List<Sprint> getSprints() {
 		List<Sprint> listOfSprints = new ArrayList<Sprint>(sprints);
@@ -64,7 +70,6 @@ public class Project {
 		return listOfSprints;
 	}
 
-	@JsonProperty("sprints")
 	void setSprints(Set<Sprint> sprints) {
 		for (Sprint sprint : sprints) {
 			addSprint(sprint);

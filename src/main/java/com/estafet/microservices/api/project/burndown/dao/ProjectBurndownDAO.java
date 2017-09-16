@@ -16,8 +16,12 @@ public class ProjectBurndownDAO {
 	public Project getProjectBurndown(int projectId) {
 		return entityManager.find(Project.class, new Integer(projectId));
 	}
-		
-	public void updateProjectBurndown(Project project) {
+	
+	public void create(Project project) {
+		entityManager.persist(project);
+	}
+	
+	public void update(Project project) {
 		entityManager.merge(project);
 	}
 
