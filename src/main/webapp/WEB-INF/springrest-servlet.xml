@@ -6,11 +6,9 @@
 
 
 	<import resource="classpath:project-burndown-entity-application-context.xml" />
-
-	<mvc:annotation-driven />
-	<context:component-scan base-package="com.estafet.microservices.api.project.burndown" />
-
 	<import resource="classpath:project-burndown-jms-application-context.xml" />
 	
+	<mvc:annotation-driven />
+	<context:component-scan base-package="com.estafet.microservices.api.project.burndown" />
 
 </beans>

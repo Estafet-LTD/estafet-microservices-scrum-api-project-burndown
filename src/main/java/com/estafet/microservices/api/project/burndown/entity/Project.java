@@ -16,8 +16,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.estafet.microservices.api.project.burndown.message.Story;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "PROJECT_BURN_PROJECT")
@@ -27,7 +25,6 @@ public class Project {
 	@Column(name = "PROJECT_ID")
 	private int id;
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "sprintProject", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Sprint> sprints = new HashSet<Sprint>();
 
@@ -52,15 +49,15 @@ public class Project {
 		return id;
 	}
 
-	public void setId(int id) {
+	public Project setId(int id) {
 		this.id = id;
+		return this;
 	}
 
 	private Sprint getLastestSprint() {
 		return getSprints().get(0);
 	}
 
-	@JsonProperty("sprints")
 	public List<Sprint> getSprints() {
 		List<Sprint> listOfSprints = new ArrayList<Sprint>(sprints);
 		Collections.sort(listOfSprints, new Comparator<Sprint>() {

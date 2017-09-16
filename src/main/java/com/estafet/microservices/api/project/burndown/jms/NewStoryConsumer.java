@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.estafet.microservices.api.project.burndown.dao.ProjectBurndownDAO;
 import com.estafet.microservices.api.project.burndown.entity.Project;
@@ -16,19 +15,18 @@ public class NewStoryConsumer {
 
 	@Autowired
 	private ProjectBurndownDAO projectBurndownDAO;
-		
-	@Transactional
+	
 	public void onMessage(String message) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			Story story  = mapper.readValue(message, Story.class);
 			Project project = projectBurndownDAO.getProjectBurndown(story.getProjectId());
 			if (project == null) {
-				project = new Project();
-				project.setId(story.getProjectId());
-				project.start();
+				project = new Project().setId(story.getProjectId()).start();
+				projectBurndownDAO.create(project.addStory(story));
+			} else {
+				projectBurndownDAO.update(project.addStory(story));	
 			}
-			projectBurndownDAO.create(project.addStory(story));
 		} catch (IOException  e) {
 			throw new RuntimeException(e);
 		} 
