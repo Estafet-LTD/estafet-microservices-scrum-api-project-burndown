@@ -25,9 +25,9 @@
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="org.postgresql.Driver" />
-		<property name="url" value="jdbc:postgresql://localhost:5432/project-burndown" />
-		<property name="username" value="postgres" />
-		<property name="password" value="welcome1" />
+		<property name="url" value="${PROJECT_BURNDOWN_REPOSITORY_JDBC_URL}" />
+		<property name="username" value="${PROJECT_BURNDOWN_REPOSITORY_DB_USER}" />
+		<property name="password" value="${PROJECT_BURNDOWN_REPOSITORY_DB_PASSWORD}" />
 	</bean>
 
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">

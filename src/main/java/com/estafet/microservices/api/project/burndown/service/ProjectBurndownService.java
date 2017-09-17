@@ -14,13 +14,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ProjectBurndownService {
 
 	public Project getSprintProject(int sprintId) {
-		return new RestTemplate().getForObject(System.getenv("PROJECT_REPOSITORY_JDBC_URL") + "/sprint/{id}/project",
+		return new RestTemplate().getForObject(System.getenv("PROJECT_REPOSITORY_SERVICE_URI") + "/sprint/{id}/project",
 				Project.class, sprintId);
 	}
 
 	@SuppressWarnings("rawtypes")
 	public int getStoryPointsTotal(int projectId) {
-		List objects = new RestTemplate().getForObject(System.getenv("PROJECT_REPOSITORY_JDBC_URL") + "/{id}/stories",
+		List objects = new RestTemplate().getForObject(System.getenv("STORY_REPOSITORY_SERVICE_URI") + "/{id}/stories",
 				List.class, projectId);
 		int total = 0;
 		ObjectMapper mapper = new ObjectMapper();
