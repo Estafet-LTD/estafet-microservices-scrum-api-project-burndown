@@ -20,7 +20,7 @@ public class ProjectBurndownService {
 
 	@SuppressWarnings("rawtypes")
 	public int getStoryPointsTotal(int projectId) {
-		List objects = new RestTemplate().getForObject(System.getenv("STORY_REPOSITORY_SERVICE_URI") + "/{id}/stories",
+		List objects = new RestTemplate().getForObject(System.getenv("STORY_REPOSITORY_SERVICE_URI") + "/project/{id}/stories",
 				List.class, projectId);
 		int total = 0;
 		ObjectMapper mapper = new ObjectMapper();
