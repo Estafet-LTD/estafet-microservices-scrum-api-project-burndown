@@ -30,6 +30,8 @@ public class Sprint {
 	@JsonInclude(Include.NON_NULL)
 	private String status;
 
+	private Integer projectId;
+
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "PROJECT_ID", referencedColumnName = "PROJECT_ID")
@@ -41,6 +43,10 @@ public class Sprint {
 
 	public Integer getNumber() {
 		return number;
+	}
+
+	public Integer getProjectId() {
+		return projectId;
 	}
 
 	public Project getSprintProject() {
