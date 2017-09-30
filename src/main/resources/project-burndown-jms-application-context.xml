@@ -30,13 +30,19 @@
 
 	<jms:listener-container connection-factory="pooledJmsConnectionFactory"
 		acknowledge="auto" destination-type="topic">
-		<jms:listener destination="update.sprint.topic" ref="sprintConsumer"
+		<jms:listener destination="update.sprint.topic" ref="completedSprintConsumer"
 			method="onMessage" />
 	</jms:listener-container>
 	
 	<jms:listener-container connection-factory="pooledJmsConnectionFactory"
 		acknowledge="auto" destination-type="topic">
-		<jms:listener destination="new.story.topic" ref="storyConsumer"
+		<jms:listener destination="new.story.topic" ref="newStoryConsumer"
+			method="onMessage" />
+	</jms:listener-container>
+	
+	<jms:listener-container connection-factory="pooledJmsConnectionFactory"
+		acknowledge="auto" destination-type="topic">
+		<jms:listener destination="new.project.topic" ref="newProjectConsumer"
 			method="onMessage" />
 	</jms:listener-container>
 	

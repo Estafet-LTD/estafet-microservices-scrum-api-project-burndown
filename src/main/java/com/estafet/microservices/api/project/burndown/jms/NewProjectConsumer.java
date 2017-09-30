@@ -8,11 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.estafet.microservices.api.project.burndown.dao.ProjectBurndownDAO;
 import com.estafet.microservices.api.project.burndown.entity.Project;
-import com.estafet.microservices.api.project.burndown.message.Story;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Component(value = "newStoryConsumer")
-public class NewStoryConsumer {
+@Component(value = "newProjectConsumer")
+public class NewProjectConsumer {
 
 	@Autowired
 	private ProjectBurndownDAO projectBurndownDAO;
@@ -21,9 +20,10 @@ public class NewStoryConsumer {
 	public void onMessage(String message) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			Story story  = mapper.readValue(message, Story.class);
-			Project project = projectBurndownDAO.getProjectBurndown(story.getProjectId());
-			projectBurndownDAO.update(project.addStory(story));
+			Project project  = mapper.readValue(message, Project.class);
+			if (projectBurndownDAO.getProjectBurndown(project.getId()) == null) {
+				projectBurndownDAO.create(project);
+			}
 		} catch (IOException  e) {
 			throw new RuntimeException(e);
 		} 

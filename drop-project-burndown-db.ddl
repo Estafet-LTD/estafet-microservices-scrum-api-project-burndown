@@ -1,3 +1,3 @@
-alter table PROJECT_BURN_SPRINT drop constraint FK6dlnafbinfbui966l5c3oixkx;
-drop table if exists PROJECT_BURN_PROJECT cascade;
-drop table if exists PROJECT_BURN_SPRINT cascade;
+alter table SPRINT drop constraint FK7pee0qu96unu7n0k20rdvfuog;
+drop table if exists PROJECT cascade;
+drop table if exists SPRINT cascade;
