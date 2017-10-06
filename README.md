@@ -49,8 +49,11 @@ JBOSS_A_MQ_BROKER_URL=tcp://localhost:61616
 JBOSS_A_MQ_BROKER_USER=estafet
 JBOSS_A_MQ_BROKER_PASSWORD=estafet
 
-PROJECT_API_JDBC_URL=jdbc:postgresql://localhost:5432/project-api
-PROJECT_API_DB_USER=postgres
-PROJECT_API_DB_PASSWORD=welcome1
+PROJECT_BURNDOWN_REPOSITORY_JDBC_URL=jdbc:postgresql://localhost:5432/project-burndown
+PROJECT_BURNDOWN_REPOSITORY_DB_USER=postgres
+PROJECT_BURNDOWN_REPOSITORY_DB_PASSWORD=welcome1
+
+STORY_REPOSITORY_SERVICE_URI=http://localhost:8080/story-repository
+PROJECT_REPOSITORY_SERVICE_URI=http://localhost:8080/project-repository
 ```
 
