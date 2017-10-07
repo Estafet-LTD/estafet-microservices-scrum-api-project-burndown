@@ -8,7 +8,7 @@ Each microservice has it's own git repository, but there is a master git reposit
 You can find a detailed explanation of how to install this (and other microservices) [here](https://github.com/Estafet-LTD/estafet-microservices-scrum#getting-started).
 ## API Interface
 
-The project burndown JSON object
+### Project Burndown JSON object
 
 ```json
 {
@@ -30,6 +30,8 @@ The project burndown JSON object
     ]
 }
 ```
+
+### Restful Operations
 
 To retrieve an example the project burndown object (useful for testing to see the microservice is online).
 
