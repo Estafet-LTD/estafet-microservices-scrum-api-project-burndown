@@ -6,5 +6,6 @@ export PROJECT_BURNDOWN_REPOSITORY_JDBC_URL=jdbc:postgresql://localhost:5432/pro
 export PROJECT_BURNDOWN_REPOSITORY_DB_USER=postgres
 export PROJECT_BURNDOWN_REPOSITORY_DB_PASSWORD=welcome1
 
-export STORY_REPOSITORY_SERVICE_URI=http://localhost:8080/story-repository
-export PROJECT_REPOSITORY_SERVICE_URI=http://localhost:8080/project-repository
+export PROJECT_API_SERVICE_URI=http://localhost:8080/project-api
+export SPRINT_API_SERVICE_URI=http://localhost:8080/sprint-api
+export STORY_API_SERVICE_URI=http://localhost:8080/story-api
