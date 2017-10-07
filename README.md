@@ -55,7 +55,8 @@ PROJECT_BURNDOWN_REPOSITORY_JDBC_URL=jdbc:postgresql://localhost:5432/project-bu
 PROJECT_BURNDOWN_REPOSITORY_DB_USER=postgres
 PROJECT_BURNDOWN_REPOSITORY_DB_PASSWORD=welcome1
 
-STORY_REPOSITORY_SERVICE_URI=http://localhost:8080/story-repository
-PROJECT_REPOSITORY_SERVICE_URI=http://localhost:8080/project-repository
+PROJECT_API_SERVICE_URI=http://localhost:8080/project-api
+SPRINT_API_SERVICE_URI=http://localhost:8080/sprint-api
+STORY_API_SERVICE_URI=http://localhost:8080/story-api
 ```
 
