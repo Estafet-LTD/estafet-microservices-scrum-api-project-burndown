@@ -1,5 +1,6 @@
 package com.estafet.microservices.api.project.burndown.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,7 +21,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "PROJECT")
-public class Project {
+public class Project implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7347366817238712743L;
 
 	@Id
 	@Column(name = "PROJECT_ID")

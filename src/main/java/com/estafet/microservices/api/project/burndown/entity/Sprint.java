@@ -1,11 +1,14 @@
 package com.estafet.microservices.api.project.burndown.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -15,7 +18,12 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "SPRINT")
-public class Sprint {
+public class Sprint implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -51039787657323533L;
 
 	@Id
 	@Column(name = "SPRINT_ID")
@@ -30,6 +38,7 @@ public class Sprint {
 	@JsonInclude(Include.NON_NULL)
 	private String status;
 
+	@Transient
 	private Integer projectId;
 
 	@JsonIgnore
