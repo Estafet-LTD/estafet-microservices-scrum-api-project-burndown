@@ -20,6 +20,9 @@ public class ProjectBurndownService {
 	@Autowired
 	private ProjectBurndownDAO projectBurndownDAO;
 	
+	@Autowired
+	private RestTemplate restTemplate;
+	
 	@Transactional(readOnly = true)
 	public Project getProjectBurndown(int id) {
 		return projectBurndownDAO.getProjectBurndown(id).getBurndown();
@@ -31,18 +34,18 @@ public class ProjectBurndownService {
 	}
 	
 	public Project getProject(int projectId) {
-		return new RestTemplate().getForObject(System.getenv("PROJECT_API_SERVICE_URI") + "/project/{id}",
+		return restTemplate.getForObject(System.getenv("PROJECT_API_SERVICE_URI") + "/project/{id}",
 				Project.class, projectId);
 	}
 	
 	public Sprint getSprint(int sprintId) {
-		return new RestTemplate().getForObject(System.getenv("SPRINT_API_SERVICE_URI") + "/sprint/{id}",
+		return restTemplate.getForObject(System.getenv("SPRINT_API_SERVICE_URI") + "/sprint/{id}",
 				Sprint.class, sprintId);
 	}
 
 	@SuppressWarnings("rawtypes")
 	public int getStoryPointsTotal(int projectId) {
-		List objects = new RestTemplate().getForObject(System.getenv("STORY_API_SERVICE_URI") + "/project/{id}/stories",
+		List objects = restTemplate.getForObject(System.getenv("STORY_API_SERVICE_URI") + "/project/{id}/stories",
 				List.class, projectId);
 		int total = 0;
 		ObjectMapper mapper = new ObjectMapper();
