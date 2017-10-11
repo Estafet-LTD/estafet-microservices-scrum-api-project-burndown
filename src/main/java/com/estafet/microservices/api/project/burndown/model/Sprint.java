@@ -1,6 +1,6 @@
-package com.estafet.microservices.api.project.burndown.entity;
+package com.estafet.microservices.api.project.burndown.model;
 
-import java.io.Serializable;
+import java.io.IOException;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,16 +14,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "SPRINT")
-public class Sprint implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -51039787657323533L;
+public class Sprint {
 
 	@Id
 	@Column(name = "SPRINT_ID")
@@ -91,6 +87,14 @@ public class Sprint implements Serializable {
 
 	void setSprintProject(Project sprintProject) {
 		this.sprintProject = sprintProject;
+	}
+	
+	public static Sprint fromJSON(String message) {
+		try {
+			return new ObjectMapper().readValue(message, Sprint.class);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

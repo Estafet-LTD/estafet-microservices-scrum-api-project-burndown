@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.estafet.microservices.api.project.burndown.dao.ProjectBurndownDAO;
-import com.estafet.microservices.api.project.burndown.entity.Project;
-import com.estafet.microservices.api.project.burndown.entity.Sprint;
-import com.estafet.microservices.api.project.burndown.message.Story;
+import com.estafet.microservices.api.project.burndown.model.Project;
+import com.estafet.microservices.api.project.burndown.model.Sprint;
+import com.estafet.microservices.api.project.burndown.model.Story;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

@@ -6,7 +6,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.estafet.microservices.api.project.burndown.entity.Project;
+import com.estafet.microservices.api.project.burndown.model.Project;
 
 @Repository
 public class ProjectBurndownDAO {

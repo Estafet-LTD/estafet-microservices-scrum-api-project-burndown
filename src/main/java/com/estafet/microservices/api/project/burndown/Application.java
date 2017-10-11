@@ -1,6 +1,5 @@
 package com.estafet.microservices.api.project.burndown;
 
-
 import javax.jms.ConnectionFactory;
 
 import org.springframework.boot.SpringApplication;
@@ -16,9 +15,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerContainerFactory;
-import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
-import org.springframework.jms.support.converter.MessageConverter;
-import org.springframework.jms.support.converter.MessageType;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
@@ -30,11 +26,6 @@ public class Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
-	}
-
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(Application.class);
 	}
 
 	/*@Bean
@@ -58,11 +49,4 @@ public class Application extends SpringBootServletInitializer {
 		return factory;
 	}
 
-	@Bean
-	public MessageConverter jacksonJmsMessageConverter() {
-		MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-		converter.setTargetType(MessageType.TEXT);
-		converter.setTypeIdPropertyName("_type");
-		return converter;
-	}
 }

@@ -1,6 +1,6 @@
-package com.estafet.microservices.api.project.burndown.entity;
+package com.estafet.microservices.api.project.burndown.model;
 
-import java.io.Serializable;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -14,19 +14,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.estafet.microservices.api.project.burndown.message.Story;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "PROJECT")
-public class Project implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7347366817238712743L;
+public class Project {
 
 	@Id
 	@Column(name = "PROJECT_ID")
@@ -77,6 +72,14 @@ public class Project implements Serializable {
 
 	public List<Sprint> getSprints() {
 		return sprints;
+	}
+	
+	public static Project fromJSON(String message) {
+		try {
+			return new ObjectMapper().readValue(message, Project.class);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

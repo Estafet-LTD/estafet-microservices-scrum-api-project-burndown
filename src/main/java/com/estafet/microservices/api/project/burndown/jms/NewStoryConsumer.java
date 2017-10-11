@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.estafet.microservices.api.project.burndown.dao.ProjectBurndownDAO;
-import com.estafet.microservices.api.project.burndown.entity.Project;
-import com.estafet.microservices.api.project.burndown.message.Story;
+import com.estafet.microservices.api.project.burndown.model.Project;
+import com.estafet.microservices.api.project.burndown.model.Story;
 
 @Component
 public class NewStoryConsumer {
@@ -17,7 +17,8 @@ public class NewStoryConsumer {
 
 	@Transactional
 	@JmsListener(destination = "new.story.topic", containerFactory = "myFactory")
-	public void onMessage(Story story) {
+	public void onMessage(String message) {
+		Story story = Story.fromJSON(message);
 		Project project = projectBurndownDAO.getProjectBurndown(story.getProjectId());
 		projectBurndownDAO.update(project.addStory(story));
 	}

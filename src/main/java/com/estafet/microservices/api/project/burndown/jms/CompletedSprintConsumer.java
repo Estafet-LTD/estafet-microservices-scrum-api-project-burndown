@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.estafet.microservices.api.project.burndown.dao.ProjectBurndownDAO;
-import com.estafet.microservices.api.project.burndown.entity.Project;
-import com.estafet.microservices.api.project.burndown.entity.Sprint;
+import com.estafet.microservices.api.project.burndown.model.Project;
+import com.estafet.microservices.api.project.burndown.model.Sprint;
 import com.estafet.microservices.api.project.burndown.service.ProjectBurndownService;
 
 @Component
@@ -21,7 +21,8 @@ public class CompletedSprintConsumer {
 
 	@Transactional
 	@JmsListener(destination = "update.sprint.topic", containerFactory = "myFactory")
-	public void onMessage(Sprint sprint) {
+	public void onMessage(String message) {
+		Sprint sprint = Sprint.fromJSON(message);
 		if (sprint.getStatus().equals("Completed")) {
 			Project project = projectBurndownService.getSprintProject(sprint.getId());
 			sprint.setPointsTotal(projectBurndownService.getStoryPointsTotal(project.getId()));
