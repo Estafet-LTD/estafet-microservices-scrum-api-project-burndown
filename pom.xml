@@ -11,17 +11,9 @@
 		<version>1.5.7.RELEASE</version>
 		<relativePath />
 	</parent>
-	<!-- <dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>Dalston.SR4</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement> -->
+	<!-- <dependencyManagement> <dependencies> <dependency> <groupId>org.springframework.cloud</groupId> 
+		<artifactId>spring-cloud-dependencies</artifactId> <version>Dalston.SR4</version> 
+		<type>pom</type> <scope>import</scope> </dependency> </dependencies> </dependencyManagement> -->
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -48,11 +40,21 @@
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 		</dependency>
-		<!-- <dependency> <groupId>io.opentracing.contrib</groupId> <artifactId>opentracing-spring-web-autoconfigure</artifactId> 
-			<version>0.0.10</version> </dependency> <dependency> <groupId>com.uber.jaeger</groupId> 
-			<artifactId>jaeger-core</artifactId> <version>0.21.0</version> </dependency> 
-			<dependency> <groupId>io.opentracing.brave</groupId> <artifactId>brave-opentracing</artifactId> 
-			<version>0.22.1</version> </dependency> -->
+		<dependency>
+			<groupId>io.opentracing.contrib</groupId>
+			<artifactId>opentracing-spring-web-autoconfigure</artifactId>
+			<version>0.0.10</version>
+		</dependency>
+		<dependency>
+			<groupId>com.uber.jaeger</groupId>
+			<artifactId>jaeger-core</artifactId>
+			<version>0.21.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.opentracing.brave</groupId>
+			<artifactId>brave-opentracing</artifactId>
+			<version>0.22.1</version>
+		</dependency>
 		<!-- <dependency> <groupId>io.opentracing.contrib</groupId> <artifactId>opentracing-spring-cloud-starter</artifactId> 
 			<version>0.0.4</version> </dependency> <dependency> <groupId>org.springframework.cloud</groupId> 
 			<artifactId>spring-cloud-starter-config</artifactId> </dependency> <dependency> 
