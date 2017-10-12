@@ -54,7 +54,7 @@ public class Application extends SpringBootServletInitializer {
 	@Bean
 	public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory, Tracer tracer) {
 	   JmsTemplate jmsTemplate = new TracingJmsTemplate(connectionFactory, tracer);
-	   jmsTemplate.setMessageConverter(new SimpleMessageConverter());
+	   jmsTemplate.setMessageConverter(tracingJmsMessageConverter(tracer));
 	   return jmsTemplate;
 	}
 	
