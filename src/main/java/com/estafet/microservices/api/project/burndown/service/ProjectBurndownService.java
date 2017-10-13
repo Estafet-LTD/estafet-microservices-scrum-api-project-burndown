@@ -34,6 +34,7 @@ public class ProjectBurndownService {
 		return projectBurndownDAO.getProjectBurndown(id).getBurndown();
 	}
 	
+	// chec
 	@Transactional
 	public void newProject(Project project) {
 		ActiveSpan activeSpan = tracer.buildSpan("newProject").startActive();
