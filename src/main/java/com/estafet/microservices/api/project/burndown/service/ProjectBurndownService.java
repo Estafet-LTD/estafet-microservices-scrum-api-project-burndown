@@ -14,18 +14,12 @@ import com.estafet.microservices.api.project.burndown.model.Story;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.opentracing.ActiveSpan;
-import io.opentracing.Tracer;
-
 @Component
 public class ProjectBurndownService {
 
 	@Autowired
 	private ProjectBurndownDAO projectBurndownDAO;
-	
-	@Autowired
-	private Tracer tracer;
-	
+		
 	@Autowired
 	private RestTemplate restTemplate;
 	
@@ -36,14 +30,9 @@ public class ProjectBurndownService {
 	
 	@Transactional
 	public void newProject(Project project) {
-		ActiveSpan activeSpan = tracer.buildSpan("newProject").startActive();
-		try {
-			if (projectBurndownDAO.getProjectBurndown(project.getId()) == null) {
-				projectBurndownDAO.create(project);
-			}	
-		} finally {
-			activeSpan.deactivate();
-		}
+		if (projectBurndownDAO.getProjectBurndown(project.getId()) == null) {
+			projectBurndownDAO.create(project);
+		}	
 	}
 	
 	@Transactional
