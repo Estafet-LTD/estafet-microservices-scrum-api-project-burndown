@@ -27,7 +27,31 @@ public class ProjectBurndownService {
 	public Project getProjectBurndown(int id) {
 		return projectBurndownDAO.getProjectBurndown(id).getBurndown();
 	}
-		
+	
+	@Transactional
+	public void newProject(Project project) {
+		if (projectBurndownDAO.getProjectBurndown(project.getId()) == null) {
+			projectBurndownDAO.create(project);
+		}
+	}
+	
+	@Transactional
+	public void newStory(Story story) {
+		Project project = projectBurndownDAO.getProjectBurndown(story.getProjectId());
+		projectBurndownDAO.update(project.addStory(story));
+	}
+	
+	@Transactional
+	public void completedSprint(Sprint sprint) {
+		if (sprint.getStatus().equals("Completed")) {
+			Project project = getSprintProject(sprint.getId());
+			sprint.setPointsTotal(getStoryPointsTotal(project.getId()));
+			project.addSprint(sprint);
+			projectBurndownDAO.update(project);
+		}
+	}
+	
+	@Transactional(readOnly = true)
 	public Project getSprintProject(int sprintId) {
 		Sprint sprint = getSprint(sprintId);
 		return projectBurndownDAO.getProjectBurndown(sprint.getProjectId());
