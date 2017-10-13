@@ -2,12 +2,15 @@ package com.estafet.microservices.api.project.burndown.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.estafet.microservices.api.project.burndown.dao.ProjectBurndownDAO;
+import com.estafet.microservices.api.project.burndown.jms.NewProjectConsumer;
 import com.estafet.microservices.api.project.burndown.model.Project;
 import com.estafet.microservices.api.project.burndown.model.Sprint;
 import com.estafet.microservices.api.project.burndown.model.Story;
@@ -17,6 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class ProjectBurndownService {
 
+	private static final Logger logger = LoggerFactory.getLogger(NewProjectConsumer.class);
+	
 	@Autowired
 	private ProjectBurndownDAO projectBurndownDAO;
 		
@@ -30,7 +35,9 @@ public class ProjectBurndownService {
 	
 	@Transactional
 	public void newProject(Project project) {
+		logger.info("Checking for project burndown");
 		if (projectBurndownDAO.getProjectBurndown(project.getId()) == null) {
+			logger.info("Creating new project burndown");
 			projectBurndownDAO.create(project);
 		}	
 	}

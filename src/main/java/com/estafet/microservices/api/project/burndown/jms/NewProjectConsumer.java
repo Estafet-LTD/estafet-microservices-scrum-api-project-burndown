@@ -12,7 +12,7 @@ import io.opentracing.Tracer;
 
 @Component
 public class NewProjectConsumer {
-
+	
 	@Autowired
 	private Tracer tracer;
 	
@@ -21,11 +21,13 @@ public class NewProjectConsumer {
 
 	@JmsListener(destination = "new.project.topic", containerFactory = "myFactory")
 	public void onMessage(String message) {
-		ActiveSpan activeSpan = tracer.buildSpan("newProject").startActive();
+		ActiveSpan span = tracer.buildSpan("newProjectBurnDown").startActive();
 		try {
-			projectBurndownService.newProject(Project.fromJSON(message));
+			Project project = Project.fromJSON(message);
+			span.setTag("project.id", project.getId());
+			projectBurndownService.newProject(project);
 		} finally {
-			activeSpan.deactivate();
+			span.deactivate();
 		}
 	}
 
