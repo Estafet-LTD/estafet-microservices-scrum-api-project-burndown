@@ -36,10 +36,13 @@ public class ProjectBurndownService {
 	
 	@Transactional
 	public void newProject(Project project) {
-		try (ActiveSpan activeSpan = tracer.buildSpan("newProject").startActive()) {
+		ActiveSpan activeSpan = tracer.buildSpan("newProject").startActive();
+		try {
 			if (projectBurndownDAO.getProjectBurndown(project.getId()) == null) {
 				projectBurndownDAO.create(project);
 			}	
+		} finally {
+			activeSpan.deactivate();
 		}
 	}
 	
