@@ -21,12 +21,9 @@ public class NewProjectConsumer {
 
 	@JmsListener(destination = "new.project.topic", containerFactory = "myFactory")
 	public void onMessage(String message) {
-		ActiveSpan span = tracer.activeSpan();
+		ActiveSpan span = tracer.activeSpan().log(message);
 		try {
-			Project project = Project.fromJSON(message);
-			span.setTag("project.id", project.getId());
-			span.log("Creating new project burndown");
-			projectBurndownService.newProject(project);
+			projectBurndownService.newProject(Project.fromJSON(message));
 		} finally {
 			span.close();
 		}
