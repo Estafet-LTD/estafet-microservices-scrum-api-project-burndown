@@ -1,7 +1,5 @@
 package com.estafet.microservices.api.project.burndown.jms;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
@@ -15,8 +13,6 @@ import io.opentracing.Tracer;
 @Component
 public class NewProjectConsumer {
 
-	private static final Logger logger = LoggerFactory.getLogger(NewProjectConsumer.class);
-	
 	@Autowired
 	private Tracer tracer;
 	
@@ -25,14 +21,14 @@ public class NewProjectConsumer {
 
 	@JmsListener(destination = "new.project.topic", containerFactory = "myFactory")
 	public void onMessage(String message) {
-		ActiveSpan span = tracer.buildSpan("newProjectBurnDown").startActive();
+		ActiveSpan span = tracer.activeSpan();
 		try {
 			Project project = Project.fromJSON(message);
 			span.setTag("project.id", project.getId());
 			span.log("Creating new project burndown");
 			projectBurndownService.newProject(project);
 		} finally {
-			span.deactivate();
+			span.close();
 		}
 	}
 

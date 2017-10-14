@@ -21,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 
 import io.opentracing.Tracer;
 import io.opentracing.contrib.jms.spring.TracingJmsTemplate;
-import io.opentracing.contrib.jms.spring.TracingMessageConverter;
 
 @Configuration
 @ComponentScan
@@ -33,10 +32,10 @@ public class Application extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
-		
+
 	@Bean
 	public MessageConverter tracingJmsMessageConverter(Tracer tracer) {
-	   return new TracingMessageConverter(new SimpleMessageConverter(), tracer);
+		return new PropagatingTracingMessageConverter(new SimpleMessageConverter(), tracer);
 	}
 
 	@Bean
@@ -45,7 +44,7 @@ public class Application extends SpringBootServletInitializer {
 				com.uber.jaeger.Configuration.SamplerConfiguration.fromEnv(),
 				com.uber.jaeger.Configuration.ReporterConfiguration.fromEnv()).getTracer();
 	}
-	
+
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
 		return restTemplateBuilder.build();
@@ -53,11 +52,11 @@ public class Application extends SpringBootServletInitializer {
 
 	@Bean
 	public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory, Tracer tracer) {
-	   JmsTemplate jmsTemplate = new TracingJmsTemplate(connectionFactory, tracer);
-	   jmsTemplate.setMessageConverter(new SimpleMessageConverter());
-	   return jmsTemplate;
+		JmsTemplate jmsTemplate = new TracingJmsTemplate(connectionFactory, tracer);
+		jmsTemplate.setMessageConverter(new SimpleMessageConverter());
+		return jmsTemplate;
 	}
-	
+
 	@Bean
 	public JmsListenerContainerFactory<?> myFactory(ConnectionFactory connectionFactory,
 			DefaultJmsListenerContainerFactoryConfigurer configurer) {
