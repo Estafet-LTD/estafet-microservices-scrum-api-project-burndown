@@ -14,7 +14,7 @@ public class ProjectBurndownController {
 	@Autowired
 	private ProjectBurndownService projectBurndownService;
 	
-	@GetMapping("/api/burndown")
+	@GetMapping("/api")
 	public Project getAPI() {
 		return Project.getAPI();
 	}
