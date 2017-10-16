@@ -14,6 +14,11 @@ public class ProjectBurndownController {
 	@Autowired
 	private ProjectBurndownService projectBurndownService;
 	
+	@GetMapping("/api/burndown")
+	public Project getAPI() {
+		return Project.getAPI();
+	}
+	
 	@GetMapping("/project/{id}/burndown")
 	public Project getProjectBurndown(@PathVariable int id) {
 		return projectBurndownService.getProjectBurndown(id);

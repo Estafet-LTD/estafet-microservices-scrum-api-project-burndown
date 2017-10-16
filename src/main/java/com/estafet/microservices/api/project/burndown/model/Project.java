@@ -82,4 +82,12 @@ public class Project {
 		}
 	}
 
+	public static Project getAPI() {
+		Project project = new Project();
+		project.id = 1;
+		project.initialPointsTotal = 20;
+		project.addSprint(Sprint.getAPI());
+		return project;
+	}
+	
 }

@@ -96,5 +96,15 @@ public class Sprint {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	public static Sprint getAPI() {
+		Sprint sprint = new Sprint();
+		sprint.id = 1;
+		sprint.number = 1;
+		sprint.pointsTotal = 20;
+		sprint.projectId = 1;
+		sprint.status = "Not Started";
+		return sprint;
+	}
 
 }
