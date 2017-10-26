@@ -20,6 +20,7 @@ import javax.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -52,6 +53,7 @@ public class ProjectBurndown {
 	@JsonIgnore
 	public ProjectBurndown getBurndown() {
 		sprints.add(new ProjectBurndownSprint().setNumber(0).setPointsTotal(this.initialPointsTotal));
+		System.out.println(toJSON());
 		return this;
 	}
 
@@ -159,7 +161,7 @@ public class ProjectBurndown {
 		for (int i=0; i < listOfSprints.size(); i++) {
 			float coefficient = (float)i / (listOfSprints.size()-1);
 			float ideal = initialPointsTotal - (coefficient * initialPointsTotal);
-			System.out.println("ideal : " + ideal);
+			//System.out.println("ideal : " + ideal);
 			listOfSprints.get(i).setIdealPointsTotal(ideal);
 		}
 		return listOfSprints;
@@ -169,6 +171,14 @@ public class ProjectBurndown {
 		try {
 			return new ObjectMapper().readValue(message, ProjectBurndown.class);
 		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public String toJSON() {
+		try {
+			return new ObjectMapper().writeValueAsString(this);
+		} catch (JsonProcessingException e) {
 			throw new RuntimeException(e);
 		}
 	}
