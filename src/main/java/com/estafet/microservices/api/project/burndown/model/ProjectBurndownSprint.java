@@ -98,6 +98,9 @@ public class ProjectBurndownSprint {
 	}
 
 	public ProjectBurndownSprint incrementPoints(int points) {
+		if (pointsTotal == null) {
+			pointsTotal = 0;
+		}
 		pointsTotal += points;
 		return this;
 	}
