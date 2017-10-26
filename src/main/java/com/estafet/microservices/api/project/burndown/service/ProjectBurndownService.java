@@ -47,7 +47,6 @@ public class ProjectBurndownService {
 	@Transactional
 	public void updateBurndown(ProjectBurndownSprint projectBurndownSprint) {
 		ProjectBurndown projectBurndown = getSprintProject(projectBurndownSprint.getId());
-		projectBurndownSprint.setPointsTotal(getStoryPointsTotal(projectBurndown.getId()));
 		projectBurndown.update(projectBurndownSprint);
 		projectBurndownDAO.update(projectBurndown);
 	}
@@ -82,22 +81,6 @@ public class ProjectBurndownService {
 			sprints.add(sprint);
 		}
 		return sprints;
-	}
-
-	@SuppressWarnings("rawtypes")
-	public int getStoryPointsTotal(int projectId) {
-		List objects = restTemplate.getForObject(System.getenv("STORY_API_SERVICE_URI") + "/project/{id}/stories",
-				List.class, projectId);
-		int total = 0;
-		ObjectMapper mapper = new ObjectMapper();
-		for (Object object : objects) {
-			Story story = mapper.convertValue(object, new TypeReference<Story>() {
-			});
-			if (!story.getStatus().equals("Completed")) {
-				total += story.getStorypoints();
-			}
-		}
-		return total;
 	}
 
 }

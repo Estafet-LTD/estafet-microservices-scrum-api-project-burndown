@@ -46,19 +46,38 @@ public class ProjectBurndown {
 	private Set<ProjectBurndownSprint> projectBurndownSprints = new HashSet<ProjectBurndownSprint>();
 
 	@JsonIgnore
+	@OneToMany(mappedBy = "storyProject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Story> stories = new HashSet<Story>();
+
+	@JsonIgnore
 	public ProjectBurndown getBurndown() {
 		projectBurndownSprints.add(new ProjectBurndownSprint().setNumber(0).setPointsTotal(this.initialPointsTotal));
 		return this;
 	}
 
 	public ProjectBurndown update(Story story) {
-		if (!projectBurndownSprints.isEmpty()) {
+		addStory(story);
+		if (hasCompletedStories()) {
 			ProjectBurndownSprint projectBurndownSprint = getLastestSprint();
 			update(projectBurndownSprint.incrementPoints(story.getStorypoints()));
 		} else {
 			initialPointsTotal += story.getStorypoints();
 		}
 		return this;
+	}
+
+	private boolean hasCompletedStories() {
+		for (Story story : stories) {
+			if (story.getStatus().equals("Completed")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void addStory(Story story) {
+		story.setStoryProject(this);
+		stories.add(story);
 	}
 
 	public ProjectBurndown update(List<ProjectBurndownSprint> sprints) {
@@ -69,13 +88,16 @@ public class ProjectBurndown {
 	}
 
 	public ProjectBurndown update(ProjectBurndownSprint projectBurndownSprint) {
-		if (projectBurndownSprint.getId() != null) {
-			getSprint(projectBurndownSprint.getId()).setPointsTotal(projectBurndownSprint.getPointsTotal());
-		} else {
-			projectBurndownSprint.setSprintProject(this);
-			projectBurndownSprints.add(projectBurndownSprint);
-		}
+		getSprint(projectBurndownSprint.getId()).setPointsTotal(totalStoryPoints());
 		return this;
+	}
+
+	private int totalStoryPoints() {
+		int total = 0;
+		for (Story story : stories) {
+			total += story.getStorypoints();
+		}
+		return total;
 	}
 
 	public Integer getId() {
