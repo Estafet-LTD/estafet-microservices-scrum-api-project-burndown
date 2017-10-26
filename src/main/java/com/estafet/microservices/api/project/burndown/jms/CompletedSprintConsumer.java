@@ -23,10 +23,7 @@ public class CompletedSprintConsumer {
 	public void onMessage(String message) {
 		ActiveSpan span = tracer.activeSpan().log(message);
 		try {
-			ProjectBurndownSprint sprint = ProjectBurndownSprint.fromJSON(message);
-			if (sprint.getStatus().equals("Completed")) {
-				projectBurndownService.updateBurndown(sprint);	
-			}
+			projectBurndownService.updateBurndown(ProjectBurndownSprint.fromJSON(message));	
 		} finally {
 			span.close();
 		}

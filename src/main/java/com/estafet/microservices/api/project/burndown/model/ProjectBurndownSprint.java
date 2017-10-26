@@ -34,6 +34,11 @@ public class ProjectBurndownSprint {
 	@Column(name = "POINTS_TOTAL")
 	private Integer pointsTotal;
 
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "PROJECT_BURNDOWN_ID", referencedColumnName = "PROJECT_BURNDOWN_ID")
+	private ProjectBurndown sprintProject;
+	
 	@Transient
 	private String status;
 
@@ -45,11 +50,6 @@ public class ProjectBurndownSprint {
 
 	@Transient
 	private String endDate;
-
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "PROJECT_BURNDOWN_ID", referencedColumnName = "PROJECT_BURNDOWN_ID")
-	private ProjectBurndown sprintProject;
 
 	public Integer getId() {
 		return id;

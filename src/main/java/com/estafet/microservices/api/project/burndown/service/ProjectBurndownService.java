@@ -43,9 +43,9 @@ public class ProjectBurndownService {
 	}
 
 	@Transactional
-	public void updateBurndown(ProjectBurndownSprint projectBurndownSprint) {
-		ProjectBurndown projectBurndown = getSprintProject(projectBurndownSprint.getId());
-		projectBurndown.update(projectBurndownSprint);
+	public void updateBurndown(ProjectBurndownSprint sprint) {
+		ProjectBurndown projectBurndown = getSprintProject(sprint.getId());
+		projectBurndown.update(sprint);
 		projectBurndownDAO.update(projectBurndown);
 	}
 

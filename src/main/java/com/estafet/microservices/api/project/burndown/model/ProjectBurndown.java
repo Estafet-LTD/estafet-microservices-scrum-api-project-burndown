@@ -43,7 +43,7 @@ public class ProjectBurndown {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "sprintProject", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<ProjectBurndownSprint> projectBurndownSprints = new HashSet<ProjectBurndownSprint>();
+	private Set<ProjectBurndownSprint> sprints = new HashSet<ProjectBurndownSprint>();
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "storyProject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -51,7 +51,7 @@ public class ProjectBurndown {
 
 	@JsonIgnore
 	public ProjectBurndown getBurndown() {
-		projectBurndownSprints.add(new ProjectBurndownSprint().setNumber(0).setPointsTotal(this.initialPointsTotal));
+		sprints.add(new ProjectBurndownSprint().setNumber(0).setPointsTotal(this.initialPointsTotal));
 		return this;
 	}
 
@@ -87,12 +87,14 @@ public class ProjectBurndown {
 		return this;
 	}
 
-	public ProjectBurndown update(ProjectBurndownSprint projectBurndownSprint) {
-		if (projectBurndownSprint.getId() != null) {
-			getSprint(projectBurndownSprint.getNumber()).setPointsTotal(totalStoryPoints());
+	public ProjectBurndown update(ProjectBurndownSprint sprint) {
+		if (sprints.contains(sprint)) {
+			if (sprint.getStatus().equals("Completed")) {
+				getSprint(sprint.getId()).setPointsTotal(totalStoryPoints());	
+			}
 		} else {
-			projectBurndownSprint.setSprintProject(this);
-			projectBurndownSprints.add(projectBurndownSprint);
+			sprint.setSprintProject(this);
+			sprints.add(sprint);
 		}
 		return this;
 	}
@@ -119,17 +121,17 @@ public class ProjectBurndown {
 		return sprintLengthDays;
 	}
 
-	private ProjectBurndownSprint getSprint(Integer sprintId) {
-		for (ProjectBurndownSprint sprint : projectBurndownSprints) {
-			if (sprint.getId() != null && sprint.getId().equals(sprintId)) {
+	private ProjectBurndownSprint getSprint(Integer sprintNumber) {
+		for (ProjectBurndownSprint sprint : sprints) {
+			if (sprint.getNumber().equals(sprintNumber)) {
 				return sprint;
 			}
 		}
-		throw new RuntimeException("Project burndown does not contain sprint with id " + sprintId);
+		throw new RuntimeException("Project burndown does not contain sprint with number " + sprintNumber);
 	}
 
 	private ProjectBurndownSprint getLastestSprint() {
-		List<ProjectBurndownSprint> listOfSprints = new ArrayList<ProjectBurndownSprint>(projectBurndownSprints);
+		List<ProjectBurndownSprint> listOfSprints = new ArrayList<ProjectBurndownSprint>(sprints);
 		Collections.sort(listOfSprints, new Comparator<ProjectBurndownSprint>() {
 			public int compare(ProjectBurndownSprint o1, ProjectBurndownSprint o2) {
 				return o2.getNumber() - o1.getNumber();
@@ -140,7 +142,7 @@ public class ProjectBurndown {
 
 	@JsonGetter
 	public List<ProjectBurndownSprint> getSprints() {
-		List<ProjectBurndownSprint> listOfSprints = new ArrayList<ProjectBurndownSprint>(projectBurndownSprints);
+		List<ProjectBurndownSprint> listOfSprints = new ArrayList<ProjectBurndownSprint>(sprints);
 		Collections.sort(listOfSprints, new Comparator<ProjectBurndownSprint>() {
 			public int compare(ProjectBurndownSprint o1, ProjectBurndownSprint o2) {
 				return o1.getNumber() - o2.getNumber();
