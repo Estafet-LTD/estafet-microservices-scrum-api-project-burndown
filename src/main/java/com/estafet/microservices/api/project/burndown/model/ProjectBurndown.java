@@ -61,7 +61,7 @@ public class ProjectBurndown {
 			ProjectBurndownSprint projectBurndownSprint = getLastestSprint();
 			update(projectBurndownSprint.incrementPoints(story.getStorypoints()));
 		} else {
-			initialPointsTotal += story.getStorypoints();
+			initialPointsTotal += totalStoryPoints();
 		}
 		return this;
 	}
@@ -103,7 +103,7 @@ public class ProjectBurndown {
 	public ProjectBurndown update(ProjectBurndownSprint sprint) {
 		if (sprints.contains(sprint)) {
 			if (sprint.getStatus().equals("Completed")) {
-				getSprint(sprint.getNumber()).setPointsTotal(totalStoryPoints());
+				getSprint(sprint.getNumber()).setPointsTotal(totalRemainingStoryPoints());
 			}
 		} else {
 			sprint.setSprintProject(this);
@@ -113,6 +113,14 @@ public class ProjectBurndown {
 	}
 
 	private int totalStoryPoints() {
+		int total = 0;
+		for (Story story : stories) {
+			total += story.getStorypoints();
+		}
+		return total;
+	}
+
+	private int totalRemainingStoryPoints() {
 		int total = 0;
 		for (Story story : stories) {
 			if (!story.equals("Completed")) {
