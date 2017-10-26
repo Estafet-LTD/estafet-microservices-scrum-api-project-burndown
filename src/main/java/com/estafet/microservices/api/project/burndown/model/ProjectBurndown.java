@@ -123,7 +123,7 @@ public class ProjectBurndown {
 	private int totalRemainingStoryPoints() {
 		int total = 0;
 		for (Story story : stories) {
-			if (!story.equals("Completed")) {
+			if (!story.getStatus().equals("Completed")) {
 				total += story.getStorypoints();
 			}
 		}
