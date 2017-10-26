@@ -61,7 +61,7 @@ public class ProjectBurndown {
 			ProjectBurndownSprint projectBurndownSprint = getLastestSprint();
 			update(projectBurndownSprint.incrementPoints(story.getStorypoints()));
 		} else {
-			initialPointsTotal += totalStoryPoints();
+			initialPointsTotal = totalStoryPoints();
 		}
 		return this;
 	}
