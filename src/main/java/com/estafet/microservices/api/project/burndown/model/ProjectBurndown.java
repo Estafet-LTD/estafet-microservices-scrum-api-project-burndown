@@ -76,8 +76,21 @@ public class ProjectBurndown {
 	}
 
 	private void addStory(Story story) {
-		story.setStoryProject(this);
-		stories.add(story);
+		if (stories.contains(story)) {
+			getStory(story.getId()).setStatus(story.getStatus());
+		} else {
+			story.setStoryProject(this);
+			stories.add(story);
+		}
+	}
+
+	private Story getStory(Integer storyId) {
+		for (Story story : stories) {
+			if (story.getId().equals(storyId)) {
+				return story;
+			}
+		}
+		throw new RuntimeException("cannot find story with id " + storyId);
 	}
 
 	public ProjectBurndown update(List<ProjectBurndownSprint> sprints) {
@@ -90,7 +103,7 @@ public class ProjectBurndown {
 	public ProjectBurndown update(ProjectBurndownSprint sprint) {
 		if (sprints.contains(sprint)) {
 			if (sprint.getStatus().equals("Completed")) {
-				getSprint(sprint.getNumber()).setPointsTotal(totalStoryPoints());	
+				getSprint(sprint.getNumber()).setPointsTotal(totalStoryPoints());
 			}
 		} else {
 			sprint.setSprintProject(this);
@@ -103,7 +116,7 @@ public class ProjectBurndown {
 		int total = 0;
 		for (Story story : stories) {
 			if (!story.equals("Completed")) {
-				total += story.getStorypoints();	
+				total += story.getStorypoints();
 			}
 		}
 		return total;
