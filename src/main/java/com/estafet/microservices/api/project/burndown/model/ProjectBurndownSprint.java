@@ -97,14 +97,6 @@ public class ProjectBurndownSprint {
 		return this;
 	}
 
-	public ProjectBurndownSprint incrementPoints(int points) {
-		if (pointsTotal == null) {
-			pointsTotal = 0;
-		}
-		pointsTotal += points;
-		return this;
-	}
-
 	void setSprintProject(ProjectBurndown sprintProject) {
 		this.sprintProject = sprintProject;
 	}
