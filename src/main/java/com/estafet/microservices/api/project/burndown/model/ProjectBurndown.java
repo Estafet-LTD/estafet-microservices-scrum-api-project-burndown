@@ -159,6 +159,7 @@ public class ProjectBurndown {
 		for (int i=0; i < listOfSprints.size(); i++) {
 			float coefficient = (float)i / (listOfSprints.size()-1);
 			float ideal = initialPointsTotal - (coefficient * initialPointsTotal);
+			System.out.println("ideal : " + ideal);
 			listOfSprints.get(i).setIdealPointsTotal(ideal);
 		}
 		return listOfSprints;
