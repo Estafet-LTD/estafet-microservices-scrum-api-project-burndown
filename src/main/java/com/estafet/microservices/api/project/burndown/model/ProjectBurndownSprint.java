@@ -40,6 +40,9 @@ public class ProjectBurndownSprint {
 	private ProjectBurndown sprintProject;
 	
 	@Transient
+	private float idealPointsTotal;
+	
+	@Transient
 	private String status;
 
 	@Transient
@@ -95,6 +98,10 @@ public class ProjectBurndownSprint {
 	public ProjectBurndownSprint setPointsTotal(Integer pointsTotal) {
 		this.pointsTotal = pointsTotal;
 		return this;
+	}
+
+	void setIdealPointsTotal(float idealPointsTotal) {
+		this.idealPointsTotal = idealPointsTotal;
 	}
 
 	void setSprintProject(ProjectBurndown sprintProject) {

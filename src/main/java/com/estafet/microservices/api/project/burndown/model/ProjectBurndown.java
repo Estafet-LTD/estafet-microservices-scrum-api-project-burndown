@@ -156,6 +156,11 @@ public class ProjectBurndown {
 				return o1.getNumber() - o2.getNumber();
 			}
 		});
+		for (int i=0; i < listOfSprints.size(); i++) {
+			float coefficient = (float)i / (listOfSprints.size()-1);
+			float ideal = initialPointsTotal - (coefficient * initialPointsTotal);
+			listOfSprints.get(i).setIdealPointsTotal(ideal);
+		}
 		return listOfSprints;
 	}
 
