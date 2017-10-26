@@ -148,16 +148,6 @@ public class ProjectBurndown {
 		throw new RuntimeException("Project burndown does not contain sprint with number " + sprintNumber);
 	}
 
-	private ProjectBurndownSprint getLastestSprint() {
-		List<ProjectBurndownSprint> listOfSprints = new ArrayList<ProjectBurndownSprint>(sprints);
-		Collections.sort(listOfSprints, new Comparator<ProjectBurndownSprint>() {
-			public int compare(ProjectBurndownSprint o1, ProjectBurndownSprint o2) {
-				return o2.getNumber() - o1.getNumber();
-			}
-		});
-		return getSprints().get(0);
-	}
-
 	@JsonGetter
 	public List<ProjectBurndownSprint> getSprints() {
 		List<ProjectBurndownSprint> listOfSprints = new ArrayList<ProjectBurndownSprint>(sprints);
