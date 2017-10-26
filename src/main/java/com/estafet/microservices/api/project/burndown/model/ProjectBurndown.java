@@ -90,7 +90,7 @@ public class ProjectBurndown {
 	public ProjectBurndown update(ProjectBurndownSprint sprint) {
 		if (sprints.contains(sprint)) {
 			if (sprint.getStatus().equals("Completed")) {
-				getSprint(sprint.getId()).setPointsTotal(totalStoryPoints());	
+				getSprint(sprint.getNumber()).setPointsTotal(totalStoryPoints());	
 			}
 		} else {
 			sprint.setSprintProject(this);
