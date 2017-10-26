@@ -88,7 +88,12 @@ public class ProjectBurndown {
 	}
 
 	public ProjectBurndown update(ProjectBurndownSprint projectBurndownSprint) {
-		getSprint(projectBurndownSprint.getId()).setPointsTotal(totalStoryPoints());
+		if (projectBurndownSprint.getId() != null) {
+			getSprint(projectBurndownSprint.getId()).setPointsTotal(totalStoryPoints());
+		} else {
+			projectBurndownSprint.setSprintProject(this);
+			projectBurndownSprints.add(projectBurndownSprint);
+		}
 		return this;
 	}
 

@@ -32,10 +32,8 @@ public class ProjectBurndownService {
 
 	@Transactional
 	public void newProject(ProjectBurndown projectBurndown) {
-		if (projectBurndownDAO.getProjectBurndown(projectBurndown.getId()) == null) {
-			projectBurndown.update(calculateSprints(projectBurndown));
-			projectBurndownDAO.create(projectBurndown);
-		}
+		projectBurndown.update(calculateSprints(projectBurndown));
+		projectBurndownDAO.create(projectBurndown);
 	}
 
 	@Transactional
