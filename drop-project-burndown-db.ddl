@@ -1,3 +1,4 @@
-alter table SPRINT drop constraint FK7pee0qu96unu7n0k20rdvfuog;
-drop table if exists PROJECT cascade;
-drop table if exists SPRINT cascade;
+alter table PROJECT_BURNDOWN_SPRINT drop constraint FKn77qpxpo7dea3cplo0lap3vjh;
+drop table if exists PROJECT_BURNDOWN cascade;
+drop table if exists PROJECT_BURNDOWN_SPRINT cascade;
+drop sequence PROJECT_BURNDOWN_SPRINT_ID_SEQ;

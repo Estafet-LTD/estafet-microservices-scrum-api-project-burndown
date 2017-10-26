@@ -23,7 +23,7 @@ public class NewStoryConsumer {
 	public void onMessage(String message) {
 		ActiveSpan span = tracer.activeSpan().log(message);
 		try {
-			projectBurndownService.newStory(Story.fromJSON(message));
+			projectBurndownService.updateBurndown(Story.fromJSON(message));
 		} finally {
 			span.close();
 		}	

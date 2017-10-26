@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.estafet.microservices.api.project.burndown.model.Project;
+import com.estafet.microservices.api.project.burndown.model.ProjectBurndown;
 import com.estafet.microservices.api.project.burndown.service.ProjectBurndownService;
 
 @RestController
@@ -15,12 +15,12 @@ public class ProjectBurndownController {
 	private ProjectBurndownService projectBurndownService;
 	
 	@GetMapping("/api")
-	public Project getAPI() {
-		return Project.getAPI();
+	public ProjectBurndown getAPI() {
+		return ProjectBurndown.getAPI();
 	}
 	
 	@GetMapping("/project/{id}/burndown")
-	public Project getProjectBurndown(@PathVariable int id) {
+	public ProjectBurndown getProjectBurndown(@PathVariable int id) {
 		return projectBurndownService.getProjectBurndown(id);
 	}
 	

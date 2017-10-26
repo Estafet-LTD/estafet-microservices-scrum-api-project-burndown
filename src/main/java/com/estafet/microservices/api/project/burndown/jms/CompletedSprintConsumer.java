@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
-import com.estafet.microservices.api.project.burndown.model.Sprint;
+import com.estafet.microservices.api.project.burndown.model.ProjectBurndownSprint;
 import com.estafet.microservices.api.project.burndown.service.ProjectBurndownService;
 
 import io.opentracing.ActiveSpan;
@@ -23,7 +23,10 @@ public class CompletedSprintConsumer {
 	public void onMessage(String message) {
 		ActiveSpan span = tracer.activeSpan().log(message);
 		try {
-			projectBurndownService.completedSprint(Sprint.fromJSON(message));
+			ProjectBurndownSprint sprint = ProjectBurndownSprint.fromJSON(message);
+			if (sprint.getStatus().equals("Completed")) {
+				projectBurndownService.updateBurndown(sprint);	
+			}
 		} finally {
 			span.close();
 		}
