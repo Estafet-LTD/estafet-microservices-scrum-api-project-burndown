@@ -27,7 +27,7 @@ public class ProjectBurndownSprint {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PROJECT_BURNDOWN_SPRINT_ID_SEQ")
 	@Column(name = "PROJECT_BURNDOWN_SPRINT_ID")
 	private Integer id;
-	
+
 	@Column(name = "SPRINT_NUMBER", nullable = false)
 	private Integer number;
 
@@ -38,16 +38,16 @@ public class ProjectBurndownSprint {
 	@ManyToOne
 	@JoinColumn(name = "PROJECT_BURNDOWN_ID", referencedColumnName = "PROJECT_BURNDOWN_ID")
 	private ProjectBurndown sprintProject;
-	
+
 	@Transient
 	private float idealPointsTotal;
-	
+
 	@Transient
 	private String status;
 
 	@Transient
 	private Integer projectId;
-	
+
 	@Transient
 	private String startDate;
 
@@ -72,6 +72,10 @@ public class ProjectBurndownSprint {
 
 	public Integer getPointsTotal() {
 		return pointsTotal;
+	}
+
+	public float getIdealPointsTotal() {
+		return idealPointsTotal;
 	}
 
 	public String getStatus() {
@@ -107,7 +111,7 @@ public class ProjectBurndownSprint {
 	void setSprintProject(ProjectBurndown sprintProject) {
 		this.sprintProject = sprintProject;
 	}
-	
+
 	public static ProjectBurndownSprint fromJSON(String message) {
 		try {
 			return new ObjectMapper().readValue(message, ProjectBurndownSprint.class);
@@ -115,7 +119,7 @@ public class ProjectBurndownSprint {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public static ProjectBurndownSprint getAPI() {
 		ProjectBurndownSprint projectBurndownSprint = new ProjectBurndownSprint();
 		projectBurndownSprint.id = 1;

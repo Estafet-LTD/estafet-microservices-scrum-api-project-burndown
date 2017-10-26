@@ -53,7 +53,6 @@ public class ProjectBurndown {
 	@JsonIgnore
 	public ProjectBurndown getBurndown() {
 		sprints.add(new ProjectBurndownSprint().setNumber(0).setPointsTotal(this.initialPointsTotal));
-		System.out.println(toJSON());
 		return this;
 	}
 
