@@ -89,7 +89,7 @@ public class ProjectBurndown {
 
 	public ProjectBurndown update(ProjectBurndownSprint projectBurndownSprint) {
 		if (projectBurndownSprint.getId() != null) {
-			getSprint(projectBurndownSprint.getId()).setPointsTotal(totalStoryPoints());
+			getSprint(projectBurndownSprint.getNumber()).setPointsTotal(totalStoryPoints());
 		} else {
 			projectBurndownSprint.setSprintProject(this);
 			projectBurndownSprints.add(projectBurndownSprint);
@@ -100,7 +100,9 @@ public class ProjectBurndown {
 	private int totalStoryPoints() {
 		int total = 0;
 		for (Story story : stories) {
-			total += story.getStorypoints();
+			if (!story.equals("Completed")) {
+				total += story.getStorypoints();	
+			}
 		}
 		return total;
 	}
