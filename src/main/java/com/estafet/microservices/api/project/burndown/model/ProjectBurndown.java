@@ -58,7 +58,7 @@ public class ProjectBurndown {
 
 	public ProjectBurndown update(Story story) {
 		addStory(story);
-		if (!hasCompletedStories()) {
+		if (!hasCompletedSprints()) {
 			initialPointsTotal = totalStoryPoints();
 		} else {
 			ProjectBurndownSprint active = getActiveSprint();
@@ -67,9 +67,9 @@ public class ProjectBurndown {
 		return this;
 	}
 
-	private boolean hasCompletedStories() {
-		for (Story story : stories) {
-			if (story.getStatus().equals("Completed")) {
+	private boolean hasCompletedSprints() {
+		for (ProjectBurndownSprint sprint : sprints) {
+			if (sprint.getStatus().equals("Completed")) {
 				return true;
 			}
 		}
