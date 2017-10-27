@@ -55,11 +55,6 @@ public class ProjectBurndownService {
 		return projectBurndownDAO.getProjectBurndown(projectBurndownSprint.getProjectId());
 	}
 
-	public ProjectBurndown getProject(int projectId) {
-		return restTemplate.getForObject(System.getenv("PROJECT_API_SERVICE_URI") + "/project/{id}",
-				ProjectBurndown.class, projectId);
-	}
-
 	public ProjectBurndownSprint getSprint(int sprintId) {
 		return restTemplate.getForObject(System.getenv("SPRINT_API_SERVICE_URI") + "/sprint/{id}",
 				ProjectBurndownSprint.class, sprintId);

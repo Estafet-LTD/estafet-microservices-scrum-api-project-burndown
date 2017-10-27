@@ -60,6 +60,9 @@ public class ProjectBurndown {
 		addStory(story);
 		if (!hasCompletedStories()) {
 			initialPointsTotal = totalStoryPoints();
+		} else {
+			ProjectBurndownSprint active = getActiveSprint();
+			active.setPointsTotal(totalRemainingStoryPoints());
 		}
 		return this;
 	}
@@ -147,6 +150,15 @@ public class ProjectBurndown {
 			}
 		}
 		throw new RuntimeException("Project burndown does not contain sprint with number " + sprintNumber);
+	}
+	
+	private ProjectBurndownSprint getActiveSprint() {
+		for (ProjectBurndownSprint sprint : sprints) {
+			if (sprint.getStatus().equals("Active")) {
+				return sprint;
+			}
+		}
+		throw new RuntimeException("Cannot find active sprint");
 	}
 
 	@JsonGetter
