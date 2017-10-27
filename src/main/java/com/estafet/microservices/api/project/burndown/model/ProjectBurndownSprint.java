@@ -34,6 +34,9 @@ public class ProjectBurndownSprint {
 	@Column(name = "POINTS_TOTAL")
 	private Integer pointsTotal;
 
+	@Column(name = "STATUS", nullable = false)
+	private String status = "Not Started";
+	
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "PROJECT_BURNDOWN_ID", referencedColumnName = "PROJECT_BURNDOWN_ID")
@@ -41,9 +44,6 @@ public class ProjectBurndownSprint {
 
 	@Transient
 	private float idealPointsTotal;
-
-	@Transient
-	private String status;
 
 	@Transient
 	private Integer projectId;

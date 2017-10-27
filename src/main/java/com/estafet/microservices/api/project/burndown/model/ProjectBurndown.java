@@ -107,10 +107,18 @@ public class ProjectBurndown {
 				getSprint(sprint.getNumber()).setPointsTotal(totalRemainingStoryPoints());
 			}
 		} else {
+			addSprint(sprint);
+		}
+		return this;
+	}
+
+	private void addSprint(ProjectBurndownSprint sprint) {
+		if (sprints.contains(sprint)) {
+			getSprint(sprint.getNumber()).setStatus(sprint.getStatus());
+		} else {
 			sprint.setSprintProject(this);
 			sprints.add(sprint);
 		}
-		return this;
 	}
 
 	private int totalStoryPoints() {
@@ -151,7 +159,7 @@ public class ProjectBurndown {
 		}
 		throw new RuntimeException("Project burndown does not contain sprint with number " + sprintNumber);
 	}
-	
+
 	private ProjectBurndownSprint getActiveSprint() {
 		for (ProjectBurndownSprint sprint : sprints) {
 			if (sprint.getStatus().equals("Active")) {
@@ -169,10 +177,10 @@ public class ProjectBurndown {
 				return o1.getNumber() - o2.getNumber();
 			}
 		});
-		for (int i=0; i < listOfSprints.size(); i++) {
-			float coefficient = (float)i / (listOfSprints.size()-1);
+		for (int i = 0; i < listOfSprints.size(); i++) {
+			float coefficient = (float) i / (listOfSprints.size() - 1);
 			float ideal = initialPointsTotal - (coefficient * initialPointsTotal);
-			//System.out.println("ideal : " + ideal);
+			// System.out.println("ideal : " + ideal);
 			listOfSprints.get(i).setIdealPointsTotal(ideal);
 		}
 		return listOfSprints;
@@ -185,7 +193,7 @@ public class ProjectBurndown {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public String toJSON() {
 		try {
 			return new ObjectMapper().writeValueAsString(this);

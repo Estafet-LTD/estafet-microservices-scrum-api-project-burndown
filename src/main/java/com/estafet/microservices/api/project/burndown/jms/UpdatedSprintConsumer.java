@@ -11,7 +11,7 @@ import io.opentracing.ActiveSpan;
 import io.opentracing.Tracer;
 
 @Component
-public class CompletedSprintConsumer {
+public class UpdatedSprintConsumer {
 
 	@Autowired
 	private Tracer tracer;
