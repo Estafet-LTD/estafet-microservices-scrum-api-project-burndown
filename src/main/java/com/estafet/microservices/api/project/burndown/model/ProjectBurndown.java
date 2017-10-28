@@ -32,6 +32,9 @@ public class ProjectBurndown {
 	@Column(name = "PROJECT_BURNDOWN_ID")
 	private Integer id;
 
+	@Column(name = "TITLE", nullable = false)
+	private String title;
+
 	@JsonIgnore
 	@Column(name = "INITIAL_POINTS_TOTAL", nullable = false)
 	private Integer initialPointsTotal = 0;
@@ -135,6 +138,10 @@ public class ProjectBurndown {
 
 	public Integer getId() {
 		return id;
+	}
+
+	public String getTitle() {
+		return title;
 	}
 
 	public Integer getNoSprints() {
