@@ -33,18 +33,12 @@ public class PropagatingTracingMessageConverter implements MessageConverter {
 
 	@Override
 	public Object fromMessage(Message message) throws JMSException, MessageConversionException {
-		ActiveSpan span =  PropagatingTracingMessageUtils.buildFollowingSpan(message, tracer);
-		try {
-			span.setTag("destination", message.getJMSDestination().toString()).log(((TextMessage)message).getText());
-			if (messageConverter != null) {
-				return messageConverter.fromMessage(message);
-			}
-			return simpleMessageConverter.fromMessage(message);
-		} finally {
-			if (span != null) {
-				span.close();
-			}
+		ActiveSpan span = PropagatingTracingMessageUtils.buildFollowingSpan(message, tracer);
+		span.setTag("destination", message.getJMSDestination().toString()).log(((TextMessage) message).getText());
+		if (messageConverter != null) {
+			return messageConverter.fromMessage(message);
 		}
+		return simpleMessageConverter.fromMessage(message);
 	}
 
 }

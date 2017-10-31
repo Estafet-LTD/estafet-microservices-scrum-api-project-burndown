@@ -7,15 +7,24 @@ import org.springframework.stereotype.Component;
 import com.estafet.microservices.api.project.burndown.model.ProjectBurndownSprint;
 import com.estafet.microservices.api.project.burndown.service.ProjectBurndownService;
 
+import io.opentracing.Tracer;
+
 @Component
 public class NewSprintConsumer {
+
+	@Autowired
+	private Tracer tracer;
 
 	@Autowired
 	private ProjectBurndownService projectBurndownService;
 
 	@JmsListener(destination = "new.sprint.topic", containerFactory = "myFactory")
 	public void onMessage(String message) {
-		projectBurndownService.updateBurndown(ProjectBurndownSprint.fromJSON(message));
+		try {
+			projectBurndownService.updateBurndown(ProjectBurndownSprint.fromJSON(message));	
+		} finally {
+			tracer.activeSpan().close();
+		}
 	}
 
 }
