@@ -3,11 +3,13 @@ package com.estafet.microservices.api.project.burndown;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
+import javax.jms.TextMessage;
 
 import org.springframework.jms.support.converter.MessageConversionException;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.SimpleMessageConverter;
 
+import io.opentracing.ActiveSpan;
 import io.opentracing.Tracer;
 
 public class PropagatingTracingMessageConverter implements MessageConverter {
@@ -31,11 +33,18 @@ public class PropagatingTracingMessageConverter implements MessageConverter {
 
 	@Override
 	public Object fromMessage(Message message) throws JMSException, MessageConversionException {
-		PropagatingTracingMessageUtils.buildFollowingSpan(message, tracer);
-		if (messageConverter != null) {
-			return messageConverter.fromMessage(message);
+		ActiveSpan span =  PropagatingTracingMessageUtils.buildFollowingSpan(message, tracer);
+		try {
+			span.setTag("destination", message.getJMSDestination().toString()).log(((TextMessage)message).getText());
+			if (messageConverter != null) {
+				return messageConverter.fromMessage(message);
+			}
+			return simpleMessageConverter.fromMessage(message);
+		} finally {
+			if (span != null) {
+				span.close();
+			}
 		}
-		return simpleMessageConverter.fromMessage(message);
 	}
 
 }
