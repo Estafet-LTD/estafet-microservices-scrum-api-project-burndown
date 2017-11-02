@@ -87,7 +87,7 @@ public class PropagatingTracingMessageUtils {
 	      Tracer tracer)
 	      throws JMSException {
 	    Tracer.SpanBuilder spanBuilder = tracer.buildSpan(TracingMessageUtils.OPERATION_NAME_SEND)
-	        .ignoreActiveSpan()
+	        //.ignoreActiveSpan()
 	        .withTag(Tags.SPAN_KIND.getKey(), Tags.SPAN_KIND_PRODUCER);
 
 	    SpanContext parent = TracingMessageUtils.extract(message, tracer);
