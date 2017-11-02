@@ -31,7 +31,7 @@ public class PropagatingTracingMessageUtils {
 	    if (context != null) {
 
 	      Tracer.SpanBuilder spanBuilder = tracer.buildSpan(OPERATION_NAME_RECEIVE)
-	          //.ignoreActiveSpan()
+	          .ignoreActiveSpan()
 	          .withTag(Tags.SPAN_KIND.getKey(), Tags.SPAN_KIND_CONSUMER);
 
 	      spanBuilder.addReference(References.FOLLOWS_FROM, context);
@@ -87,7 +87,7 @@ public class PropagatingTracingMessageUtils {
 	      Tracer tracer)
 	      throws JMSException {
 	    Tracer.SpanBuilder spanBuilder = tracer.buildSpan(TracingMessageUtils.OPERATION_NAME_SEND)
-	        //.ignoreActiveSpan()
+	        .ignoreActiveSpan()
 	        .withTag(Tags.SPAN_KIND.getKey(), Tags.SPAN_KIND_PRODUCER);
 
 	    SpanContext parent = TracingMessageUtils.extract(message, tracer);
