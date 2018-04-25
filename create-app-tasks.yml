@@ -1,0 +1,72 @@
+---
+- include: postgres-vars.yml 
+  
+- include: a-mq-vars.yml  
+
+- name: include the variables for this microservice      
+  include_vars:
+    file: microservice-vars.yml   
+  
+- name: Copy ddl to PostgreSQL Pod
+  shell: 'oc rsync --no-perms=true --include="*.ddl" --exclude="*" ./ {{db_pod}}:/tmp'
+  register: command_result
+  failed_when: "'exists' not in command_result.stderr and command_result.rc != 0"
+  changed_when: "'exists' not in command_result.stderr"
+  tags:
+    - openshift
+    - postgresql
+
+- name: Create the microservice databases on PostgreSQL Pod
+  shell: 'oc exec {{db_pod}} -- /bin/sh -i -c "createdb {{ microservice }}"'
+  register: command_result
+  failed_when: "'exists' not in command_result.stderr and command_result.rc != 0"
+  changed_when: "'exists' not in command_result.stderr"
+  tags:
+    - openshift
+    - postgresql
+        
+- name: Execute Drop ddl on PostgreSQL Pod
+  shell: 'oc exec {{db_pod}} -- /bin/sh -i -c "psql -d {{ microservice }} -U postgres -f /tmp/{{ drop_ddl }}"'
+  register: command_result
+  failed_when: "'exists' not in command_result.stderr and command_result.rc != 0"
+  changed_when: "'exists' not in command_result.stderr"
+  tags:
+    - openshift
+    - postgresql
+
+- name: Execute Create ddl on PostgreSQL Pod
+  shell: 'oc exec {{db_pod}} -- /bin/sh -i -c "psql -d {{ microservice }} -U postgres -f /tmp/{{ create_ddl }}"'
+  register: command_result
+  failed_when: "'exists' not in command_result.stderr and command_result.rc != 0"
+  changed_when: "'exists' not in command_result.stderr"
+  tags:
+    - openshift
+    - postgresql
+
+- set_fact: service_envs="-e JAEGER_SAMPLER_TYPE=const -e JAEGER_SAMPLER_PARAM=1 -e JAEGER_SAMPLER_MANAGER_HOST_PORT=jaeger-agent.microservices-scrum.svc:5778 -e JAEGER_AGENT_HOST=jaeger-agent.microservices-scrum.svc"
+
+- set_fact: service_envs="{{ service_envs }} -e {{ service_uri_env }}=http://{{ service_host }}:8080"
+  
+- name: Create the microservices application from the source to image builder for db application
+  shell: 'oc new-app redhat-openjdk18-openshift~{{ github }}/{{ repo }} --name={{ microservice }} -e {{ db_url_env }}=jdbc:postgresql://{{ db_ip }}:5432/{{ microservice }} -e {{ db_user_env }}=postgres -e {{ db_db_env }}=welcome1 -e JBOSS_A_MQ_BROKER_URL=tcp://{{ broker_ip }}:61616 -e JBOSS_A_MQ_BROKER_USER={{ broker_pod_user }} -e JBOSS_A_MQ_BROKER_PASSWORD={{ broker_pod_password }} {{ service_envs }} && sleep 120'
+  register: command_result
+  failed_when: "'exists' not in command_result.stderr and command_result.rc != 0"
+  changed_when: "'exists' not in command_result.stderr"
+  tags:
+    - openshift         
+
+- name: Set the readiness probe 
+  shell: "oc set probe dc/{{ microservice }} --readiness --get-url=http://:8080/api --initial-delay-seconds=60"
+  register: command_result
+  failed_when: "'exists' not in command_result.stderr and command_result.rc != 0"
+  changed_when: "'exists' not in command_result.stderr"
+  tags:
+    - openshift
+
+- name: Configure the resource limits for this microservice
+  shell: "oc set resources dc {{ microservice }} -c={{ microservice }} --limits=cpu={{ cpu_max }},memory={{ memory_max }} --requests=cpu={{ cpu_min }},memory={{ memory_min }}"
+  register: command_result
+  failed_when: "'exists' not in command_result.stderr and command_result.rc != 0"
+  changed_when: "'exists' not in command_result.stderr"
+  tags:
+    - openshift         

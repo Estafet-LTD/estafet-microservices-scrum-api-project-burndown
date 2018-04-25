@@ -1,0 +1,33 @@
+---
+# Define the name of the OpenShift project
+project_name: project-burndown
+
+# Define the name of the microservice
+microservice: project-burndown
+
+create_ddl: create-project-api-db.ddl
+drop_ddl: drop-project-api-db.ddl
+
+db_url_env: PROJECT_BURNDOWN_REPOSITORY_JDBC_URL
+db_user_env: PROJECT_BURNDOWN_REPOSITORY_DB_USER
+db_db_env: PROJECT_BURNDOWN_REPOSITORY_DB_PASSWORD    
+
+service_host: project-burndown.microservices-scrum.svc 
+service_uri_env: PROJECT_BURNDOWN_SERVICE_URI
+
+# defines the location of the estafet github (change this if you have forked and want to use another github)
+github: https://github.com/Estafet-LTD
+repo: estafet-microservices-scrum-api-project-burndown
+
+# UNCOMENT Define the OpenShift host:port address
+openshift: 10.0.75.2:8443
+
+# Your OpenShift credentials
+username: developer
+password: developer
+
+cpu_min: 50m
+cpu_max: 500m
+
+memory_min: 50Mi
+memory_max: 150Mi
