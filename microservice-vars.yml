@@ -1,12 +1,9 @@
 ---
-# Define the name of the OpenShift project
-project_name: project-burndown
-
 # Define the name of the microservice
 microservice: project-burndown
 
-create_ddl: create-project-api-db.ddl
-drop_ddl: drop-project-api-db.ddl
+create_ddl: create-project-burndown-db.ddl
+drop_ddl: drop-project-burndown-db.ddl
 
 db_url_env: PROJECT_BURNDOWN_REPOSITORY_JDBC_URL
 db_user_env: PROJECT_BURNDOWN_REPOSITORY_DB_USER
