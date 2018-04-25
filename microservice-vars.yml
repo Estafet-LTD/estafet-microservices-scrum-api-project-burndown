@@ -9,8 +9,6 @@ db_url_env: PROJECT_BURNDOWN_REPOSITORY_JDBC_URL
 db_user_env: PROJECT_BURNDOWN_REPOSITORY_DB_USER
 db_db_env: PROJECT_BURNDOWN_REPOSITORY_DB_PASSWORD    
 
-service_host: project-burndown.microservices-scrum.svc 
-
 # defines the location of the estafet github (change this if you have forked and want to use another github)
 github: https://github.com/Estafet-LTD
 repo: estafet-microservices-scrum-api-project-burndown
