@@ -1,20 +1,27 @@
 ---
 - name: include the variables for this microservice      
   include_vars:
-    file: microservice-vars.yml   
-
+    file: microservice-vars.yml  
+    
 - include: postgres.yml 
-- include: a-mq-vars.yml  
+- include: a-mq-vars.yml
+- include: service_envs.yml  
 
-- set_fact: service_envs="JAEGER_SAMPLER_TYPE=const -e JAEGER_SAMPLER_PARAM=1 -e JAEGER_SAMPLER_MANAGER_HOST_PORT=jaeger-agent.microservices-scrum.svc:5778 -e JAEGER_AGENT_HOST=jaeger-agent.microservices-scrum.svc"
-  
-- name: Create the microservices application from the source to image builder for application
-  shell: 'oc new-app redhat-openjdk18-openshift~{{ github }}/{{ repo }} --name={{ microservice }} -e {{ db_url_env }}=jdbc:postgresql://{{ db_ip }}:5432/{{ microservice }} -e {{ db_user_env }}=postgres -e {{ db_db_env }}=welcome1 -e JBOSS_A_MQ_BROKER_URL=tcp://{{ broker_ip }}:61616 -e JBOSS_A_MQ_BROKER_USER={{ broker_pod_user }} -e JBOSS_A_MQ_BROKER_PASSWORD={{ broker_pod_password }} -e {{ service_envs }} && sleep 180'
+- name: Create the microservices application from the source to image builder for db application
+  shell: 'oc new-app redhat-openjdk18-openshift~{{ github }}/{{ repo }} --name={{ microservice }} -e {{ db_url_env }}=jdbc:postgresql://{{ db_ip }}:5432/{{ microservice }} -e {{ db_user_env }}=postgres -e {{ db_db_env }}=welcome1 -e JBOSS_A_MQ_BROKER_URL=tcp://{{ broker_ip }}:61616 -e JBOSS_A_MQ_BROKER_USER={{ broker_pod_user }} -e JBOSS_A_MQ_BROKER_PASSWORD={{ broker_pod_password }} -e {{ service_envs }}'
   register: command_result
   failed_when: "'exists' not in command_result.stderr and command_result.rc != 0"
   changed_when: "'exists' not in command_result.stderr"
   tags:
     - openshift         
+
+- name: Wait for the microservice to become available
+  shell : "oc rollout status dc/{{ microservice }}"
+  register: command_result
+  failed_when: "'exists' not in command_result.stderr and command_result.rc != 0"
+  changed_when: "'exists' not in command_result.stderr"
+  tags:
+    - openshift   
 
 - name: Set the readiness probe 
   shell: "oc set probe dc/{{ microservice }} --readiness --get-url=http://:8080/api --initial-delay-seconds=60"
@@ -30,4 +37,12 @@
   failed_when: "'exists' not in command_result.stderr and command_result.rc != 0"
   changed_when: "'exists' not in command_result.stderr"
   tags:
-    - openshift         
+    - openshift
+    
+- name: Wait for the microservice to become available
+  shell : "oc rollout status dc/{{ microservice }}"
+  register: command_result
+  failed_when: "'exists' not in command_result.stderr and command_result.rc != 0"
+  changed_when: "'exists' not in command_result.stderr"
+  tags:
+    - openshift             
