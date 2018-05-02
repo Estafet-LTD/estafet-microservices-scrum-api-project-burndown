@@ -9,11 +9,7 @@ node("maven") {
 
 	stage("build and execute unit tests") {
 		sh "mvn clean test"
-		post {
-			always {
-				junit "**/target/surefire-reports/*.xml"
-			}
-		}
+		junit "**/target/surefire-reports/*.xml"
 	}
 
 	stage("update the database schema") {
@@ -26,11 +22,11 @@ node("maven") {
 	}
 
 	stage("build & deploy container") {
-		openshiftBuild namespace: ${project}, buildConfig: ${microservice}, showBuildLogs: "true",  waitTime: "3000000"
+		openshiftBuild namespace: project, buildConfig: microservice, showBuildLogs: "true",  waitTime: "3000000"
 	}
   	  
 	stage("verify container deployment") {
-		openshiftVerifyDeployment namespace: ${project}, depCfg: ${microservice}, replicaCount:"1", verifyReplicaCount: "true", waitTime: "300000"	
+		openshiftVerifyDeployment namespace: project, depCfg: microservice, replicaCount:"1", verifyReplicaCount: "true", waitTime: "300000"	
 	}
 
 	stage("execute the container tests") {
@@ -45,11 +41,7 @@ node("maven") {
 			]) {
 			sh "mvn verify -P integration-test"
 		}
-		post {
-			always {
-				junit "**/target/failsafe-reports/*.xml"
-			}
-		}
+		junit "**/target/failsafe-reports/*.xml"
 	}
 
 }

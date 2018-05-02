@@ -1,79 +1,62 @@
 package com.estafet.microservices.api.project.burndown.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
-
-import com.estafet.microservices.api.project.burndown.dao.ProjectBurndownDAO;
-import com.estafet.microservices.api.project.burndown.messages.CalculateSprints;
 import com.estafet.microservices.api.project.burndown.model.ProjectBurndown;
 import com.estafet.microservices.api.project.burndown.model.ProjectBurndownSprint;
 import com.estafet.microservices.api.project.burndown.model.Story;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Component
-public class ProjectBurndownService {
+/**
+ * 
+ * @author Dennis
+ *
+ */
+public interface ProjectBurndownService {
 
-	@Autowired
-	private ProjectBurndownDAO projectBurndownDAO;
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	ProjectBurndown getProjectBurndown(int id);
 
-	@Autowired
-	private RestTemplate restTemplate;
+	/**
+	 * 
+	 * @param projectBurndown
+	 */
+	void newProject(ProjectBurndown projectBurndown);
 
-	@Transactional(readOnly = true)
-	public ProjectBurndown getProjectBurndown(int id) {
-		return projectBurndownDAO.getProjectBurndown(id).getBurndown();
-	}
+	/**
+	 * 
+	 * @param story
+	 */
+	void updateBurndown(Story story);
 
-	@Transactional
-	public void newProject(ProjectBurndown projectBurndown) {
-		projectBurndown.update(calculateSprints(projectBurndown));
-		projectBurndownDAO.create(projectBurndown);
-	}
+	/**
+	 * 
+	 * @param sprint
+	 */
+	void updateBurndown(ProjectBurndownSprint sprint);
 
-	@Transactional
-	public void updateBurndown(Story story) {
-		ProjectBurndown projectBurndown = projectBurndownDAO.getProjectBurndown(story.getProjectId());
-		projectBurndownDAO.update(projectBurndown.update(story));
-	}
+	/**
+	 * 
+	 * @param sprintId
+	 * @return
+	 */
+	ProjectBurndown getSprintProject(int sprintId);
 
-	@Transactional
-	public void updateBurndown(ProjectBurndownSprint sprint) {
-		ProjectBurndown projectBurndown = getSprintProject(sprint.getId());
-		projectBurndown.update(sprint);
-		projectBurndownDAO.update(projectBurndown);
-	}
+	/**
+	 * 
+	 * @param sprintId
+	 * @return
+	 */
+	ProjectBurndownSprint getSprint(int sprintId);
 
-	@Transactional(readOnly = true)
-	public ProjectBurndown getSprintProject(int sprintId) {
-		ProjectBurndownSprint projectBurndownSprint = getSprint(sprintId);
-		return projectBurndownDAO.getProjectBurndown(projectBurndownSprint.getProjectId());
-	}
-
-	public ProjectBurndownSprint getSprint(int sprintId) {
-		return restTemplate.getForObject(System.getenv("SPRINT_API_SERVICE_URI") + "/sprint/{id}",
-				ProjectBurndownSprint.class, sprintId);
-	}
-
-	@SuppressWarnings("rawtypes")
-	public List<ProjectBurndownSprint> calculateSprints(ProjectBurndown burndown) {
-		CalculateSprints message = new CalculateSprints(burndown.getId(), burndown.getSprintLengthDays(),
-				burndown.getNoSprints());
-		List objects = restTemplate.postForObject(System.getenv("SPRINT_API_SERVICE_URI") + "/calculate-sprints",
-				message, List.class);
-		List<ProjectBurndownSprint> sprints = new ArrayList<ProjectBurndownSprint>();
-		ObjectMapper mapper = new ObjectMapper();
-		for (Object object : objects) {
-			ProjectBurndownSprint sprint = mapper.convertValue(object, new TypeReference<ProjectBurndownSprint>() {
-			});
-			sprints.add(sprint);
-		}
-		return sprints;
-	}
+	/**
+	 * 
+	 * @param burndown
+	 * @return
+	 */
+	List<ProjectBurndownSprint> calculateSprints(ProjectBurndown burndown);
 
 }
