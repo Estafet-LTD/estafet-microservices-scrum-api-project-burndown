@@ -205,6 +205,9 @@ public class ProjectBurndown {
 	public static ProjectBurndown getAPI() {
 		ProjectBurndown projectBurndown = new ProjectBurndown();
 		projectBurndown.id = 1;
+		projectBurndown.title = "my project";
+		projectBurndown.noSprints = 1;
+		projectBurndown.sprintLengthDays= 5;
 		projectBurndown.initialPointsTotal = 20;
 		projectBurndown.update(ProjectBurndownSprint.getAPI());
 		return projectBurndown;

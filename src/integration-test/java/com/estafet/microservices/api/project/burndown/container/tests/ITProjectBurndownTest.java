@@ -1,5 +1,4 @@
-package com.estafet.microservices.api.project.burndown;
-
+package com.estafet.microservices.api.project.burndown.container.tests;
 
 import static org.junit.Assert.*;
 
@@ -36,7 +35,6 @@ import javax.jms.Topic;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
-@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, DbUnitTestExecutionListener.class })
@@ -52,40 +50,46 @@ public class ITProjectBurndownTest {
 		get("/api").then().body("id", equalTo(1)).body("title", equalTo("my project"));
 	}
 
+	@Ignore
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-data.xml")
 	public void testGetProjectBurndown() {
 		fail("Not yet implemented");
 	}
 	
+	@Ignore
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-data.xml")
 	public void testNewProjectConsumer() {
-		
+		fail("Not yet implemented");
 	}
 	
+	@Ignore
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-data.xml")
 	public void testNewSprintConsumer() {
-		
+		fail("Not yet implemented");
 	}
 	
+	@Ignore
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-data.xml")
 	public void testNewStoryConsumer() {
-		
+		fail("Not yet implemented");
 	}
 	
+	@Ignore
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-data.xml")
 	public void testUpdatedSprintConsumer() {
-		
+		fail("Not yet implemented");
 	}
 	
+	@Ignore
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-data.xml")
 	public void testUpdatedStoryConsumer() {
-		
+		fail("Not yet implemented");
 	}
 
 }

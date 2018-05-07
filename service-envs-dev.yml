@@ -1,4 +1,5 @@
 ---
 
-- set_fact: service_envs="--build-env SPRINT_API_SERVICE_URI=http://localhost:8080/sprint-api"
-- set_fact: service_envs="{{ service_envs }} -e MAVEN_MIRROR_URL=http://nexus.cicd.svc:8081/nexus/content/groups/public"
+- set_fact: service_envs="--build-env MAVEN_MIRROR_URL=http://nexus.cicd.svc:8081/nexus/content/groups/public"
+- set_fact: service_envs="{{ service_envs }} -e SPRINT_API_SERVICE_URI=http://wiremock-docker.dev.svc:8080/project-burndown/sprint-api"
+
