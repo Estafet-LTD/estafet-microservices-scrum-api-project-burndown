@@ -26,7 +26,7 @@ node("maven") {
 
 	stage("build & deploy container") {
 		openshiftBuild namespace: project, buildConfig: microservice, showBuildLogs: "true",  waitTime: "300000"
-		openshiftVerifyDeployment namespace: project, depCfg: microservice, replicaCount:"1", verifyReplicaCount: "true", waitTime: "300000"
+		openshiftVerifyDeployment namespace: project, depCfg: microservice, replicaCount:"1", verifyReplicaCount: "true", waitTime: "500000"
 	}
 
 	stage("container tests") {
@@ -35,7 +35,7 @@ node("maven") {
 				[	"PROJECT_BURNDOWN_REPOSITORY_JDBC_URL=jdbc:postgresql://postgresql.${project}.svc:5432/${microservice}", 
 					"PROJECT_BURNDOWN_REPOSITORY_DB_USER=postgres", 
 					"PROJECT_BURNDOWN_REPOSITORY_DB_PASSWORD=welcome1",
-					"PROJECT_BURNDOWN_SERVICE_URI=http://${microservice}.${project}-scrum.svc:8080",
+					"PROJECT_BURNDOWN_SERVICE_URI=http://${microservice}.${project}.svc:8080",
 					"JBOSS_A_MQ_BROKER_URL=tcp://broker-amq-tcp.${project}.svc:61616",
 					"JBOSS_A_MQ_BROKER_USER=amq",
 					"JBOSS_A_MQ_BROKER_PASSWORD=amq"
