@@ -35,17 +35,20 @@ import io.restassured.RestAssured;
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, DbUnitTestExecutionListener.class })
 public class ITProjectBurndownTest {
 
-	NewProjectTopic topic;
-	
+	NewProjectTopic projectTopic;
+	NewSprintTopic sprintTopic;
+
 	@Before
 	public void before() throws Exception {
 		RestAssured.baseURI = System.getenv("PROJECT_BURNDOWN_SERVICE_URI");
-		topic = new NewProjectTopic();
+		projectTopic = new NewProjectTopic();
+		sprintTopic = new NewSprintTopic();
 	}
-	
+
 	@After
 	public void after() throws Exception {
-		topic.closeConnection();
+		projectTopic.closeConnection();
+		sprintTopic.closeConnection();
 	}
 
 	@Test
@@ -58,20 +61,14 @@ public class ITProjectBurndownTest {
 	public void testGetProjectBurndown() {
 		get("/project/1/burndown").then().body("id", is(1)).body("title", is("My Project #6889"))
 				.body("sprints.id", hasItems(null, 1000, 1001)).body("sprints.pointsTotal", hasItems(235, 54, 38))
-				.body("sprints.idealPointsTotal", hasItems(235.0d, 117.5d, 0.0d));
+				.body("sprints.idealPointsTotal", hasItems(235.0f, 117.5f, 0.0f));
 	}
 
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-empty.xml")
-	public void testNewProjectConsumer() {
-		fail("Not yet implemented");
-	}
-
-	@Ignore
-	@Test
-	@DatabaseSetup("ITProjectBurndownTest-data.xml")
-	public void testNewSprintConsumer() {
-		fail("Not yet implemented");
+	public void testNewProject() throws Exception {
+		projectTopic.send("{\"title\":\"My Project #1\",\"noSprints\":5,\"sprintLengthDays\":5}");
+		String msg = "{ \\\"id\\\": 1, \\\"startDate\\\": \\\"2017-10-01 00:00:00\\\", \\\"endDate\\\": \\\"2017-10-06 00:00:00\\\", \\\"number\\\": 1, \\\"status\\\": \\\"Completed\\\",  \\\"projectId\\\": 1,  \\\"noDays\\\": 5 }";
 	}
 
 	@Ignore
@@ -95,18 +92,18 @@ public class ITProjectBurndownTest {
 		fail("Not yet implemented");
 	}
 
-	public class NewProjectTopic {
+	abstract class TopicProducer {
 
 		Connection connection;
 		MessageProducer messageProducer;
 		Session session;
 
-		public NewProjectTopic() throws JMSException {
+		public TopicProducer(String topicName) throws JMSException {
 			ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(System.getenv("JBOSS_A_MQ_BROKER_URL"));
 			connection = connectionFactory.createConnection(System.getenv("JBOSS_A_MQ_BROKER_USER"),
 					System.getenv("JBOSS_A_MQ_BROKER_PASSWORD"));
 			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-			Topic topic = session.createTopic("new.project.topic");
+			Topic topic = session.createTopic(topicName);
 			messageProducer = session.createProducer(topic);
 		}
 
@@ -117,6 +114,19 @@ public class ITProjectBurndownTest {
 		public void send(String message) throws JMSException {
 			TextMessage textMessage = session.createTextMessage(message);
 			messageProducer.send(textMessage);
+		}
+
+	}
+
+	class NewProjectTopic extends TopicProducer {
+		public NewProjectTopic() throws JMSException {
+			super("new.project.topic");
+		}
+	}
+	
+	class NewSprintTopic extends TopicProducer {
+		public NewSprintTopic() throws JMSException {
+			super("new.sprint.topic");
 		}
 	}
 
