@@ -58,7 +58,7 @@ public class ITProjectBurndownTest {
 	public void testGetProjectBurndown() {
 		get("/project/1/burndown").then().body("id", is(1)).body("title", is("My Project #6889"))
 				.body("sprints.id", hasItems(null, 1000, 1001)).body("sprints.pointsTotal", hasItems(235, 54, 38))
-				.body("sprints.idealPointsTotal", hasItems(235.0, 117.5, 0.0));
+				.body("sprints.idealPointsTotal", hasItems(235.0d, 117.5d, 0.0d));
 	}
 
 	@Test
