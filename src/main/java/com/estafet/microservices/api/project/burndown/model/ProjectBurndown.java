@@ -110,6 +110,8 @@ public class ProjectBurndown {
 			existing.setStatus(sprint.getStatus());
 			if (existing.getStatus().equals("Completed")) {
 				existing.setPointsTotal(totalRemainingStoryPoints());
+			} else {
+				existing.setStatus(sprint.getStatus());
 			}
 		} else {
 			sprint.setSprintProject(this);

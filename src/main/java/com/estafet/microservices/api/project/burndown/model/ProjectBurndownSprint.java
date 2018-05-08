@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Table(name = "PROJECT_BURNDOWN_SPRINT")
 public class ProjectBurndownSprint {
 
+	@JsonIgnore
 	@Id
 	@SequenceGenerator(name = "PROJECT_BURNDOWN_SPRINT_ID_SEQ", sequenceName = "PROJECT_BURNDOWN_SPRINT_ID_SEQ", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PROJECT_BURNDOWN_SPRINT_ID_SEQ")
@@ -135,6 +136,7 @@ public class ProjectBurndownSprint {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((number == null) ? 0 : number.hashCode());
+		result = prime * result + ((projectId == null) ? 0 : projectId.hashCode());
 		return result;
 	}
 
@@ -151,6 +153,11 @@ public class ProjectBurndownSprint {
 			if (other.number != null)
 				return false;
 		} else if (!number.equals(other.number))
+			return false;
+		if (projectId == null) {
+			if (other.projectId != null)
+				return false;
+		} else if (!projectId.equals(other.projectId))
 			return false;
 		return true;
 	}

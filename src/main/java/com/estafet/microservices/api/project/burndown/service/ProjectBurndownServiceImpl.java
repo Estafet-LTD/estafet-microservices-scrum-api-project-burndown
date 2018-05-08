@@ -60,10 +60,8 @@ public class ProjectBurndownServiceImpl implements ProjectBurndownService {
 	@Override
 	@Transactional
 	public void updateBurndown(ProjectBurndownSprint sprint) {
-		
 		ProjectBurndown projectBurndown = projectBurndownDAO.getProjectBurndown(sprint.getProjectId());
-		projectBurndown.update(sprint);
-		projectBurndownDAO.update(projectBurndown);
+		projectBurndownDAO.update(projectBurndown.update(sprint));
 	}
 
 	/* (non-Javadoc)
