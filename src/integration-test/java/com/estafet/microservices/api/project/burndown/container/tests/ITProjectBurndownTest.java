@@ -37,7 +37,11 @@ public class ITProjectBurndownTest {
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-data.xml")
 	public void testGetProjectBurndown() {
-		get("/project/1/burndown").then().body("id", is("1")).body("title", is("My Project #6889"));
+		get("/project/1/burndown").then().body("id", is(1))
+			.body("title", is("My Project #6889"))
+			.body("sprints.id", hasItems(null, 1000, 10001))
+			.body("sprints.pointsTotal", hasItems(235, 54, 38))
+			.body("sprints.idealPointsTotal", hasItems(235.0, 117.5, 0.0));
 	}
 	
 	@Ignore
