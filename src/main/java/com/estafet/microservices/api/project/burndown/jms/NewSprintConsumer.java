@@ -23,7 +23,9 @@ public class NewSprintConsumer {
 		try {
 			projectBurndownService.updateBurndown(ProjectBurndownSprint.fromJSON(message));	
 		} finally {
-			tracer.activeSpan().close();
+			if (tracer.activeSpan() != null) {
+				tracer.activeSpan().close();	
+			}
 		}
 	}
 

@@ -27,7 +27,9 @@ public class NewProjectConsumerImpl implements NewProjectConsumer {
 		try {
 			projectBurndownService.newProject(ProjectBurndown.fromJSON(message));
 		} finally {
-			tracer.activeSpan().close();
+			if (tracer.activeSpan() != null) {
+				tracer.activeSpan().close();	
+			}
 		}
 	}
 
