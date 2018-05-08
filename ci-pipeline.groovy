@@ -29,7 +29,7 @@ node("maven") {
 		def json = readFile('pods.json');
 		def pod = new groovy.json.JsonSlurper().parseText(json).items[0].metadata.name
 		sh "oc exec ${pod} -n ${project} -- /bin/sh -i -c \"rm -f /home/wiremock/mappings/*.json\""
-		sh "oc rsync ./src/integration-test/resources/mappings/ ${pod}:/home/wiremock/mappings -n ${project}"
+		sh "oc rsync src/integration-test/resources/mappings/ ${pod}:/home/wiremock/mappings -n ${project}"
 		openshiftDeploy namespace: project, depCfg: "wiremock-docker", showBuildLogs: "true",  waitTime: "3000000"
 		openshiftVerifyDeployment namespace: project, depCfg: "wiremock-docker", replicaCount:"1", verifyReplicaCount: "true", waitTime: "300000"
 	}
