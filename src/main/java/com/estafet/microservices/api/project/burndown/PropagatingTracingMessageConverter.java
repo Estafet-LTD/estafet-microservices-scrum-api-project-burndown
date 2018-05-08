@@ -34,8 +34,6 @@ public class PropagatingTracingMessageConverter implements MessageConverter {
 	@Override
 	public Object fromMessage(Message message) throws JMSException, MessageConversionException {
 		ActiveSpan span = PropagatingTracingMessageUtils.buildFollowingSpan(message, tracer);
-		System.out.println(span);
-		System.out.println(message);
 		if (span != null) {
 			span.setTag("destination", message.getJMSDestination().toString()).log(((TextMessage) message).getText());	
 		}

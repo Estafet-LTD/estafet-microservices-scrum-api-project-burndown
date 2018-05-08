@@ -23,7 +23,9 @@ public class UpdatedStoryConsumer {
 		try {
 			projectBurndownService.updateBurndown(Story.fromJSON(message));
 		} finally {
-			tracer.activeSpan().close();
+			if (tracer.activeSpan() != null) {
+				tracer.activeSpan().close();	
+			}
 		}	
 	}
 

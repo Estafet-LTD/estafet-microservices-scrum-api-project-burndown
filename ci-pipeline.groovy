@@ -23,6 +23,16 @@ node("maven") {
 		sh "oc exec ${pod}  -n ${project} -- /bin/sh -i -c \"psql -d ${microservice} -U postgres -f /tmp/drop-${microservice}-db.ddl\""
 		sh "oc exec ${pod}  -n ${project} -- /bin/sh -i -c \"psql -d ${microservice} -U postgres -f /tmp/create-${microservice}-db.ddl\""
 	}
+	
+	stage("update wiremock") {
+		sh "oc get pods --selector app=wiremock-docker -o json -n ${project} > pods.json"
+		def json = readFile('pods.json');
+		def pod = new groovy.json.JsonSlurper().parseText(json).items[0].metadata.name
+		sh "oc exec ${pod} -n ${project} -- /bin/sh -i -c \"rm -f /home/wiremock/mappings/*.json\""
+		sh "oc rsync ./src/integration-test/resources/mappings/ ${pod}:/home/wiremock/mappings -n ${project}"
+		openshiftDeploy namespace: project, depCfg: "wiremock-docker", showBuildLogs: "true",  waitTime: "3000000"
+		openshiftVerifyDeployment namespace: project, depCfg: "wiremock-docker", replicaCount:"1", verifyReplicaCount: "true", waitTime: "300000"
+	}
 
 	stage("build & deploy container") {
 		openshiftBuild namespace: project, buildConfig: microservice, showBuildLogs: "true",  waitTime: "300000"
