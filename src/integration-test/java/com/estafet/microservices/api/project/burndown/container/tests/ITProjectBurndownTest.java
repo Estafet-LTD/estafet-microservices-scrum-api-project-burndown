@@ -60,11 +60,11 @@ public class ITProjectBurndownTest {
 	@DatabaseSetup("ITProjectBurndownTest-data.xml")
 	public void testGetProjectBurndown() {
 		get("/project/1/burndown").then()
-				.body("id", is(1))
-				.body("title", is("My Project #6889"))
-				.body("sprints.id", hasItems(null, 1000, 1001))
-				.body("sprints.pointsTotal", hasItems(235, 54, 38))
-				.body("sprints.idealPointsTotal", hasItems(235.0f, 117.5f, 0.0f));
+			.body("id", is(1))
+			.body("title", is("My Project #6889"))
+			.body("sprints.number", hasItems(0, 1, 2))
+			.body("sprints.pointsTotal", hasItems(235, 54, 38))
+			.body("sprints.idealPointsTotal", hasItems(235.0f, 117.5f, 0.0f));
 	}
 
 	@Test
@@ -76,7 +76,9 @@ public class ITProjectBurndownTest {
 		get("/project/1/burndown").then()
 			.body("id", is(1))
 			.body("title", is("My Project #1"))
-			.body("sprints.number", hasItems(1, 2, 3, 4, 5));
+			.body("sprints.number", hasItems(0, 1, 2, 3, 4, 5))
+			.body("sprints.pointsTotal", hasItems(0, 0, 0, 0, 0, 0))
+			.body("sprints.idealPointsTotal", hasItems(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f));
 	}
 
 	@Ignore
