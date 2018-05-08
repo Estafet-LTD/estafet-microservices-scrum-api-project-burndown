@@ -40,20 +40,6 @@ public interface ProjectBurndownService {
 
 	/**
 	 * 
-	 * @param sprintId
-	 * @return
-	 */
-	ProjectBurndown getSprintProject(int sprintId);
-
-	/**
-	 * 
-	 * @param sprintId
-	 * @return
-	 */
-	ProjectBurndownSprint getSprint(int sprintId);
-
-	/**
-	 * 
 	 * @param burndown
 	 * @return
 	 */

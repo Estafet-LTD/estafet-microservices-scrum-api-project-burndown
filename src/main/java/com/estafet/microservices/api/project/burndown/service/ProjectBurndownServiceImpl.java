@@ -60,28 +60,10 @@ public class ProjectBurndownServiceImpl implements ProjectBurndownService {
 	@Override
 	@Transactional
 	public void updateBurndown(ProjectBurndownSprint sprint) {
-		ProjectBurndown projectBurndown = getSprintProject(sprint.getId());
+		
+		ProjectBurndown projectBurndown = projectBurndownDAO.getProjectBurndown(sprint.getProjectId());
 		projectBurndown.update(sprint);
 		projectBurndownDAO.update(projectBurndown);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.estafet.microservices.api.project.burndown.service.ProjectBurndownService#getSprintProject(int)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public ProjectBurndown getSprintProject(int sprintId) {
-		ProjectBurndownSprint projectBurndownSprint = getSprint(sprintId);
-		return projectBurndownDAO.getProjectBurndown(projectBurndownSprint.getProjectId());
-	}
-
-	/* (non-Javadoc)
-	 * @see com.estafet.microservices.api.project.burndown.service.ProjectBurndownService#getSprint(int)
-	 */
-	@Override
-	public ProjectBurndownSprint getSprint(int sprintId) {
-		return restTemplate.getForObject(System.getenv("SPRINT_API_SERVICE_URI") + "/sprint/{id}",
-				ProjectBurndownSprint.class, sprintId);
 	}
 
 	/* (non-Javadoc)

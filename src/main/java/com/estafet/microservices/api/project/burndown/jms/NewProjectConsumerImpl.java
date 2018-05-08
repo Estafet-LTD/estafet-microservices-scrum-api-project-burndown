@@ -32,5 +32,4 @@ public class NewProjectConsumerImpl implements NewProjectConsumer {
 			}
 		}
 	}
-
 }
