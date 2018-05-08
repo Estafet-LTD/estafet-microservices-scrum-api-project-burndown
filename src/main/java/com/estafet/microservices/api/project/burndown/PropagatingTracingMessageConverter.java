@@ -36,7 +36,9 @@ public class PropagatingTracingMessageConverter implements MessageConverter {
 		ActiveSpan span = PropagatingTracingMessageUtils.buildFollowingSpan(message, tracer);
 		System.out.println(span);
 		System.out.println(message);
-		span.setTag("destination", message.getJMSDestination().toString()).log(((TextMessage) message).getText());	
+		if (span != null) {
+			span.setTag("destination", message.getJMSDestination().toString()).log(((TextMessage) message).getText());	
+		}
 		if (messageConverter != null) {
 			return messageConverter.fromMessage(message);
 		}
