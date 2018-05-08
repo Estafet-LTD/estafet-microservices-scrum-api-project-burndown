@@ -38,6 +38,11 @@ node("maven") {
 		openshiftBuild namespace: project, buildConfig: microservice, showBuildLogs: "true",  waitTime: "300000"
 		openshiftVerifyDeployment namespace: project, depCfg: microservice, replicaCount:"1", verifyReplicaCount: "true", waitTime: "500000"
 	}
+	
+	stage("reset the a-mq to purge topics") {
+		openshiftDeploy namespace: project, depCfg: "broker-amq", showBuildLogs: "true",  waitTime: "3000000"
+		openshiftVerifyDeployment namespace: project, depCfg: "broker-amq", replicaCount:"1", verifyReplicaCount: "true", waitTime: "500000"
+	}
 
 	stage("container tests") {
 		try {
@@ -47,7 +52,6 @@ node("maven") {
 					"PROJECT_BURNDOWN_REPOSITORY_DB_PASSWORD=welcome1",
 					"PROJECT_BURNDOWN_SERVICE_URI=http://${microservice}.${project}.svc:8080",
 					"JBOSS_A_MQ_BROKER_URL=tcp://broker-amq-tcp.${project}.svc:61616",
-					"JBOSS_A_MQ_BROKER_JMX_URL=service:jmx:rmi:///jndi/rmi://broker-amq-tcp.${project}.svc:1099/jmxrmi",
 					"JBOSS_A_MQ_BROKER_USER=amq",
 					"JBOSS_A_MQ_BROKER_PASSWORD=amq"
 				]) {

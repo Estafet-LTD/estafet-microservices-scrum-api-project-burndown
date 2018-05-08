@@ -45,7 +45,9 @@ public class ITProjectBurndownTest {
 
 	@Test
 	public void testGetAPI() {
-		get("/api").then().body("id", equalTo(1)).body("title", equalTo("my project"));
+		get("/api").then()
+			.body("id", equalTo(1))
+			.body("title", equalTo("my project"));
 	}
 
 	@Test
