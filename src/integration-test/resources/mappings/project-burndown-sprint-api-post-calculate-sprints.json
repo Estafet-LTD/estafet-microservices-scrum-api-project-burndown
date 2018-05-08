@@ -2,10 +2,7 @@
 	"request": {
 		"method": "POST",
 		"url": "/project-burndown/sprint-api/calculate-sprints",
-		"body": "[{ \"projectId\": 1, \"noDays\": 5, \"noSprints\": 5 }]",
-		"headers": {
-            "Content-Type": "application/json"
-        }
+		"body": "[{ \"projectId\": 1, \"noDays\": 5, \"noSprints\": 5 }]"
 	},
 	"response": {
 		"status": 200,
