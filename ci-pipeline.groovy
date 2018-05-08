@@ -47,6 +47,7 @@ node("maven") {
 					"PROJECT_BURNDOWN_REPOSITORY_DB_PASSWORD=welcome1",
 					"PROJECT_BURNDOWN_SERVICE_URI=http://${microservice}.${project}.svc:8080",
 					"JBOSS_A_MQ_BROKER_URL=tcp://broker-amq-tcp.${project}.svc:61616",
+					"JBOSS_A_MQ_BROKER_JMX_URL=service:jmx:rmi:///jndi/rmi://broker-amq-tcp.${project}.svc:1099/jmxrmi",
 					"JBOSS_A_MQ_BROKER_USER=amq",
 					"JBOSS_A_MQ_BROKER_PASSWORD=amq"
 				]) {
