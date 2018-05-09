@@ -38,8 +38,8 @@ public class ITProjectBurndownTest {
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-data.xml")
 	public void testGetProjectBurndown() {
-		get("/project/1/burndown").then()
-			.body("id", is(1))
+		get("/project/1000/burndown").then()
+			.body("id", is(1000))
 			.body("title", is("My Project #6889"))
 			.body("sprints.number", hasItems(0, 1, 2))
 			.body("sprints.pointsTotal", hasItems(235, 54, 38))
@@ -47,7 +47,7 @@ public class ITProjectBurndownTest {
 	}
 
 	@Test
-	@DatabaseSetup("ITProjectBurndownTest-empty.xml")
+	@DatabaseSetup("ITProjectBurndownTest-data.xml")
 	public void testNewProjectMessage() throws Exception {
 		NewProjectTopic.sendMessage("{ \"id\": 1, \"title\":\"My Project #1\",\"noSprints\":5,\"sprintLengthDays\":5 }");
 		get("/project/1/burndown").then()
@@ -60,7 +60,7 @@ public class ITProjectBurndownTest {
 	}
 	
 	@Test
-	@DatabaseSetup("ITProjectBurndownTest-empty.xml")
+	@DatabaseSetup("ITProjectBurndownTest-data.xml")
 	public void testNewProjectMessageThenNewSprintMessage() throws Exception {
 		NewProjectTopic.sendMessage("{ \"id\": 1, \"title\":\"My Project #1\",\"noSprints\":5,\"sprintLengthDays\":5 }");		
 		NewSprintTopic.sendMessage("{ \"id\": 1, \"startDate\": \"2017-10-01 00:00:00\", \"endDate\": \"2017-10-06 00:00:00\", \"number\": 1, \"status\": \"Active\",  \"projectId\": 1,  \"noDays\": 5 }");
