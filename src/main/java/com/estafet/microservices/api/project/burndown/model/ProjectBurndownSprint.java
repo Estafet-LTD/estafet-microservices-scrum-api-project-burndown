@@ -46,10 +46,13 @@ public class ProjectBurndownSprint {
 	@Transient
 	private float idealPointsTotal;
 
+	@Transient
 	private Integer projectId;
 
+	@Column(name = "START_DATE")
 	private String startDate;
 
+	@Column(name = "END_DATE")
 	private String endDate;
 
 	public Integer getId() {
