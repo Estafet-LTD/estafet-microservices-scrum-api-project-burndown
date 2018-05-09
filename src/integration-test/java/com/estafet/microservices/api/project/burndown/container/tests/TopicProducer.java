@@ -12,38 +12,33 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 
 public abstract class TopicProducer {
 
-	Connection connection;
 	String topicName;
+	Connection connection;
 
 	public TopicProducer(String topicName) {
-		try {
-			this.topicName = topicName;
-			ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(System.getenv("JBOSS_A_MQ_BROKER_URL"));
-			connection = connectionFactory.createConnection(System.getenv("JBOSS_A_MQ_BROKER_USER"),
-					System.getenv("JBOSS_A_MQ_BROKER_PASSWORD"));
-		} catch (JMSException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public void closeConnection() {
-		try {
-			connection.close();
-		} catch (JMSException e) {
-			throw new RuntimeException(e);
-		}
+		this.topicName = topicName;
 	}
 
 	public void send(String message) {
 		try {
+			ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(System.getenv("JBOSS_A_MQ_BROKER_URL"));
+			connection = connectionFactory.createConnection(System.getenv("JBOSS_A_MQ_BROKER_USER"),
+					System.getenv("JBOSS_A_MQ_BROKER_PASSWORD"));
 			Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 			Topic topic = session.createTopic(topicName);
 			MessageProducer messageProducer = session.createProducer(topic);
 			TextMessage textMessage = session.createTextMessage(message);
 			messageProducer.send(textMessage);
-			session.close();
 		} catch (JMSException e) {
 			throw new RuntimeException(e);
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (JMSException e) {
+				throw new RuntimeException(e);
+			}
 		}
 	}
 

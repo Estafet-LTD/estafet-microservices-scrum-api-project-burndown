@@ -7,7 +7,6 @@ import javax.jms.JMSException;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -27,20 +26,9 @@ import io.restassured.RestAssured;
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, DbUnitTestExecutionListener.class })
 public class ITProjectBurndownTest {
 
-	NewProjectTopic projectTopic;
-	NewSprintTopic sprintTopic;
-
 	@Before
 	public void before() throws Exception {
 		RestAssured.baseURI = System.getenv("PROJECT_BURNDOWN_SERVICE_URI");
-		projectTopic = new NewProjectTopic();
-		sprintTopic = new NewSprintTopic();
-	}
-
-	@After
-	public void after() throws Exception {
-		projectTopic.closeConnection();
-		sprintTopic.closeConnection();
 	}
 
 	@Test
@@ -65,9 +53,9 @@ public class ITProjectBurndownTest {
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-empty.xml")
 	public void testNewProject() throws Exception {
-		projectTopic.send("{ \"id\": 1, \"title\":\"My Project #1\",\"noSprints\":5,\"sprintLengthDays\":5 }");
+		new NewProjectTopic().send("{ \"id\": 1, \"title\":\"My Project #1\",\"noSprints\":5,\"sprintLengthDays\":5 }");
 		Thread.sleep(1000);
-		//sprintTopic.send("{ \"id\": 1, \"startDate\": \"2017-10-01 00:00:00\", \"endDate\": \"2017-10-06 00:00:00\", \"number\": 1, \"status\": \"Active\",  \"projectId\": 1,  \"noDays\": 5 }");
+		//new NewSprintTopic().send("{ \"id\": 1, \"startDate\": \"2017-10-01 00:00:00\", \"endDate\": \"2017-10-06 00:00:00\", \"number\": 1, \"status\": \"Active\",  \"projectId\": 1,  \"noDays\": 5 }");
 		//Thread.sleep(2000);
 		get("/project/1/burndown").then()
 			.body("id", is(1))
