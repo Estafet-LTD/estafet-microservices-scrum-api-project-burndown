@@ -17,10 +17,10 @@ import com.estafet.microservices.api.project.burndown.service.ProjectBurndownSer
 
 @Ignore
 @RunWith(MockitoJUnitRunner.class)
-public class NewProjectConsumerImplTest {
+public class NewProjectConsumerTest {
 
 	@InjectMocks
-	NewProjectConsumer consumer = new NewProjectConsumerImpl();
+	NewProjectConsumer consumer = new NewProjectConsumer();
 	
 	@Mock
 	ProjectBurndownService projectBurndownService;

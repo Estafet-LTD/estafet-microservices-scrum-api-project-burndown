@@ -6,16 +6,6 @@ node("maven") {
 	stage("checkout") {
 		git branch: "master", url: "https://github.com/Estafet-LTD/estafet-microservices-scrum-api-project-burndown"
 	}
-	
-/*
-	stage("unit tests") {
-		try {
-			sh "mvn clean test"
-		} finally {
-			junit "**/target/surefire-reports/*.xml"
-		}
-	}
-*/
 
 	stage("update database") {
 		sh "oc get pods --selector app=postgresql -o json -n ${project} > pods.json"
@@ -58,7 +48,7 @@ node("maven") {
 					"JBOSS_A_MQ_BROKER_USER=amq",
 					"JBOSS_A_MQ_BROKER_PASSWORD=amq"
 				]) {
-					sh "mvn verify -P integration-test"
+					sh "mvn clean verify -P integration-test"
 				}
 			} finally {
 				sh "oc set env dc/${microservice} JBOSS_A_MQ_BROKER_URL=tcp://localhost:61616 -n ${project}"
