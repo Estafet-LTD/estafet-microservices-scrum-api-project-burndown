@@ -13,17 +13,14 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 public abstract class TopicProducer {
 
 	Connection connection;
-	MessageProducer messageProducer;
-	Session session;
+	String topicName;
 
 	public TopicProducer(String topicName) {
 		try {
+			this.topicName = topicName;
 			ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(System.getenv("JBOSS_A_MQ_BROKER_URL"));
 			connection = connectionFactory.createConnection(System.getenv("JBOSS_A_MQ_BROKER_USER"),
 					System.getenv("JBOSS_A_MQ_BROKER_PASSWORD"));
-			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-			Topic topic = session.createTopic(topicName);
-			messageProducer = session.createProducer(topic);
 		} catch (JMSException e) {
 			throw new RuntimeException(e);
 		}
@@ -39,6 +36,9 @@ public abstract class TopicProducer {
 
 	public void send(String message) {
 		try {
+			Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+			Topic topic = session.createTopic(topicName);
+			MessageProducer messageProducer = session.createProducer(topic);
 			TextMessage textMessage = session.createTextMessage(message);
 			messageProducer.send(textMessage);
 		} catch (JMSException e) {
