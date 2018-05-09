@@ -36,7 +36,7 @@ public abstract class TopicProducer {
 			try {
 				session.close();
 				connection.close();
-				Thread.sleep(1000);
+				Thread.sleep(2000);
 			} catch (JMSException | InterruptedException e) {
 				throw new RuntimeException(e);
 			}

@@ -35,7 +35,6 @@ public class ITProjectBurndownTest {
 			.body("title", equalTo("my project"));
 	}
 
-	@Ignore
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-data.xml")
 	public void testGetProjectBurndown() {
@@ -57,7 +56,9 @@ public class ITProjectBurndownTest {
 			.body("title", is("My Project #1"))
 			.body("sprints.number", hasItems(0, 1, 2, 3, 4, 5))
 			.body("sprints.pointsTotal", hasItems(0, 0, 0, 0, 0, 0))
-			.body("sprints.idealPointsTotal", hasItems(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f));
+			.body("sprints.idealPointsTotal", hasItems(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f))
+			.body("sprints.status", hasItems(null, "Active", "Not Started", "Not Started", "Not Started", "Not Started"));
+		
 	}
 
 	@Ignore
