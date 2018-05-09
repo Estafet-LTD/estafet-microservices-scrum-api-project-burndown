@@ -59,7 +59,6 @@ public class ITProjectBurndownTest {
 			.body("sprints.status", hasItems("Not Started", "Not Started", "Not Started", "Not Started", "Not Started", "Not Started"));		
 	}
 	
-	@Ignore
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-empty.xml")
 	public void testNewProjectMessageThenNewSprintMessage() throws Exception {
