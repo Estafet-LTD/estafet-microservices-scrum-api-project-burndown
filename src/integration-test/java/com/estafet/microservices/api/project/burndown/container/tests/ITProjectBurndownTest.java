@@ -51,6 +51,13 @@ public class ITProjectBurndownTest {
 	@DatabaseSetup("ITProjectBurndownTest-empty.xml")
 	public void testNewProject() throws Exception {
 		NewProjectTopic.sendMessage("{ \"id\": 1, \"title\":\"My Project #1\",\"noSprints\":5,\"sprintLengthDays\":5 }");
+		get("/project/1/burndown").then()
+			.body("id", is(1))
+			.body("title", is("My Project #1"))
+			.body("sprints.number", hasItems(0, 1, 2, 3, 4, 5))
+			.body("sprints.pointsTotal", hasItems(0, 0, 0, 0, 0, 0))
+			.body("sprints.idealPointsTotal", hasItems(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f))
+			.body("sprints.status", hasItems("Not Started", "Not Started", "Not Started", "Not Started", "Not Started", "Not Started"));		
 		NewSprintTopic.sendMessage("{ \"id\": 1, \"startDate\": \"2017-10-01 00:00:00\", \"endDate\": \"2017-10-06 00:00:00\", \"number\": 1, \"status\": \"Active\",  \"projectId\": 1,  \"noDays\": 5 }");
 		get("/project/1/burndown").then()
 			.body("id", is(1))
@@ -58,8 +65,7 @@ public class ITProjectBurndownTest {
 			.body("sprints.number", hasItems(0, 1, 2, 3, 4, 5))
 			.body("sprints.pointsTotal", hasItems(0, 0, 0, 0, 0, 0))
 			.body("sprints.idealPointsTotal", hasItems(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f))
-			.body("sprints.status", hasItems(null, "Active", "Not Started", "Not Started", "Not Started", "Not Started"));
-		
+			.body("sprints.status", hasItems("Not Started", "Active", "Not Started", "Not Started", "Not Started", "Not Started"));
 	}
 
 	@Ignore
