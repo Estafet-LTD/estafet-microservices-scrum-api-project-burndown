@@ -48,7 +48,7 @@ public class ITProjectBurndownTest {
 
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-data.xml")
-	public void testNewProjectMessage() {
+	public void testNewProject() {
 		NewProjectTopic.sendMessage("{ \"id\": 1, \"title\":\"My Project #1\",\"noSprints\":5,\"sprintLengthDays\":5 }");
 		get("/project/1/burndown").then()
 			.body("id", is(1))
@@ -61,7 +61,7 @@ public class ITProjectBurndownTest {
 	
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-data.xml")
-	public void testNewProjectMessageThenNewSprintMessage() {
+	public void testNewProjectThenNewSprint() {
 		NewProjectTopic.sendMessage("{ \"id\": 1, \"title\":\"My Project #1\",\"noSprints\":5,\"sprintLengthDays\":5 }");		
 		NewSprintTopic.sendMessage("{ \"id\": 1, \"startDate\": \"2017-10-01 00:00:00\", \"endDate\": \"2017-10-06 00:00:00\", \"number\": 1, \"status\": \"Active\",  \"projectId\": 1,  \"noDays\": 5 }");
 		get("/project/1/burndown").then()
@@ -73,18 +73,36 @@ public class ITProjectBurndownTest {
 			.body("sprints.status", hasItems("Not Started", "Active", "Not Started", "Not Started", "Not Started", "Not Started"));
 	}
 
-	@Ignore
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-data.xml")
-	public void testNewStoryConsumer() {
-		fail("Not yet implemented");
+	public void testNewStoriesAddedToProject() {
+		NewProjectTopic.sendMessage("{ \"id\": 1, \"title\":\"My Project #1\",\"noSprints\":5,\"sprintLengthDays\":5 }");		
+		NewSprintTopic.sendMessage("{ \"id\": 1, \"startDate\": \"2017-10-01 00:00:00\", \"endDate\": \"2017-10-06 00:00:00\", \"number\": 1, \"status\": \"Active\",  \"projectId\": 1,  \"noDays\": 5 }");
+		NewStoryTopic.sendMessage("{ \"id\": 1, \"title\": \"some test story\",  \"description\": \"hghghg\",  \"storypoints\": 5,  \"projectId\": 1,  \"criteria\": [ {  \"id\": 1,  \"description\": \"hghghg\" }, { \"id\": 2, \"description\": \"jhjhjh\" } ], \"status\": \"Not Started\" }");
+		get("/project/1/burndown").then()
+			.body("id", is(1))
+			.body("title", is("My Project #1"))
+			.body("sprints.number", hasItems(0, 1, 2, 3, 4, 5))
+			.body("sprints.pointsTotal", hasItems(5, 0, 0, 0, 0, 0))
+			.body("sprints.idealPointsTotal", hasItems(5.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f))
+			.body("sprints.status", hasItems("Not Started", "Active", "Not Started", "Not Started", "Not Started", "Not Started"));
+		NewStoryTopic.sendMessage("{ \"id\": 2, \"title\": \"another test story\",  \"description\": \"jhjhkhk\",  \"storypoints\": 20,  \"projectId\": 1,  \"criteria\": [ {  \"id\": 1,  \"description\": \"hghghg\" }, { \"id\": 2, \"description\": \"jhjhjh\" } ], \"status\": \"Not Started\" }");
+		get("/project/1/burndown").then()
+			.body("id", is(1))
+			.body("title", is("My Project #1"))
+			.body("sprints.number", hasItems(0, 1, 2, 3, 4, 5))
+			.body("sprints.pointsTotal", hasItems(25, 0, 0, 0, 0, 0))
+			.body("sprints.idealPointsTotal", hasItems(25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f))
+			.body("sprints.status", hasItems("Not Started", "Active", "Not Started", "Not Started", "Not Started", "Not Started"));		
 	}
 
-	@Ignore
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-data.xml")
-	public void testUpdatedSprintConsumer() {
-		fail("Not yet implemented");
+	public void testStoriesMovedToSprint() {
+		NewProjectTopic.sendMessage("{ \"id\": 1, \"title\":\"My Project #1\",\"noSprints\":5,\"sprintLengthDays\":5 }");		
+		NewSprintTopic.sendMessage("{ \"id\": 1, \"startDate\": \"2017-10-01 00:00:00\", \"endDate\": \"2017-10-06 00:00:00\", \"number\": 1, \"status\": \"Active\",  \"projectId\": 1,  \"noDays\": 5 }");
+		NewStoryTopic.sendMessage("{ \"id\": 1, \"title\": \"some test story\",  \"description\": \"hghghg\",  \"storypoints\": 5,  \"projectId\": 1,  \"criteria\": [ {  \"id\": 1,  \"description\": \"hghghg\" }, { \"id\": 2, \"description\": \"jhjhjh\" } ], \"status\": \"Not Started\" }");
+		NewStoryTopic.sendMessage("{ \"id\": 2, \"title\": \"another test story\",  \"description\": \"jhjhkhk\",  \"storypoints\": 20,  \"projectId\": 1,  \"criteria\": [ {  \"id\": 1,  \"description\": \"hghghg\" }, { \"id\": 2, \"description\": \"jhjhjh\" } ], \"status\": \"Not Started\" }");
 	}
 
 	@Ignore
