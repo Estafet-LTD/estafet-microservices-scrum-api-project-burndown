@@ -133,7 +133,7 @@ public class ITProjectBurndownTest {
 			.body("title", is("My Project #1"))
 			.body("sprints.number", hasItems(0, 1, 2, 3, 4, 5))
 			.body("sprints.pointsTotal", hasItems(33, 8, 0, 0, 0, 0))
-			.body("sprints.idealPointsTotal", hasItems(33.0f, 8.0f, 0.0f, 0.0f, 0.0f, 0.0f))
+			.body("sprints.idealPointsTotal", hasItems(33.0f, 26.4f, 13.199999f, 6.6000004f, 0.0f))
 			.body("sprints.status", hasItems("Not Started", "Completed", "Active", "Not Started", "Not Started", "Not Started"));
 		
 	}
