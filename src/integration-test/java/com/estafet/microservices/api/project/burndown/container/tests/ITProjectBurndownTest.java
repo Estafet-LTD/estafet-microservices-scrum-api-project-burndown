@@ -1,9 +1,6 @@
 package com.estafet.microservices.api.project.burndown.container.tests;
 
 import static org.junit.Assert.*;
-
-import javax.jms.JMSException;
-
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
@@ -53,9 +50,9 @@ public class ITProjectBurndownTest {
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-empty.xml")
 	public void testNewProject() throws Exception {
-		new NewProjectTopic().send("{ \"id\": 1, \"title\":\"My Project #1\",\"noSprints\":5,\"sprintLengthDays\":5 }");
-		Thread.sleep(1000);
-		//new NewSprintTopic().send("{ \"id\": 1, \"startDate\": \"2017-10-01 00:00:00\", \"endDate\": \"2017-10-06 00:00:00\", \"number\": 1, \"status\": \"Active\",  \"projectId\": 1,  \"noDays\": 5 }");
+		NewProjectTopic.sendMessage("{ \"id\": 1, \"title\":\"My Project #1\",\"noSprints\":5,\"sprintLengthDays\":5 }");
+		Thread.sleep(5000);
+		//NewSprintTopic().sendMessage("{ \"id\": 1, \"startDate\": \"2017-10-01 00:00:00\", \"endDate\": \"2017-10-06 00:00:00\", \"number\": 1, \"status\": \"Active\",  \"projectId\": 1,  \"noDays\": 5 }");
 		//Thread.sleep(2000);
 		get("/project/1/burndown").then()
 			.body("id", is(1))
@@ -84,18 +81,6 @@ public class ITProjectBurndownTest {
 	@DatabaseSetup("ITProjectBurndownTest-data.xml")
 	public void testUpdatedStoryConsumer() {
 		fail("Not yet implemented");
-	}
-
-	class NewProjectTopic extends TopicProducer {
-		public NewProjectTopic() throws JMSException {
-			super("new.project.topic");
-		}
-	}
-	
-	class NewSprintTopic extends TopicProducer {
-		public NewSprintTopic() throws JMSException {
-			super("new.sprint.topic");
-		}
 	}
 
 }

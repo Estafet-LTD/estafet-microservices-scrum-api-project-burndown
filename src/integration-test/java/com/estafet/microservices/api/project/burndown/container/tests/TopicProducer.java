@@ -33,9 +33,7 @@ public abstract class TopicProducer {
 			throw new RuntimeException(e);
 		} finally {
 			try {
-				if (connection != null) {
-					connection.close();
-				}
+				connection.close();
 			} catch (JMSException e) {
 				throw new RuntimeException(e);
 			}
