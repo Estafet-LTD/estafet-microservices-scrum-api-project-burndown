@@ -41,6 +41,7 @@ public abstract class TopicProducer {
 			MessageProducer messageProducer = session.createProducer(topic);
 			TextMessage textMessage = session.createTextMessage(message);
 			messageProducer.send(textMessage);
+			session.close();
 		} catch (JMSException e) {
 			throw new RuntimeException(e);
 		}
