@@ -21,7 +21,6 @@ public class NewSprintConsumer {
 	@JmsListener(destination = "new.sprint.topic", containerFactory = "myFactory")
 	public void onMessage(String message) {
 		try {
-			System.out.println(message);
 			projectBurndownService.updateBurndown(ProjectBurndownSprint.fromJSON(message));	
 		} finally {
 			if (tracer.activeSpan() != null) {
