@@ -105,8 +105,8 @@ public class ProjectBurndown {
 	}
 
 	public ProjectBurndown update(ProjectBurndownSprint sprint) {
-		if (sprints.contains(sprint)) {
-			ProjectBurndownSprint existing = getSprint(sprint.getNumber());
+		ProjectBurndownSprint existing = getSprint(sprint.getNumber());
+		if (existing != null) {
 			existing.setStatus(sprint.getStatus());
 			if (existing.getStatus().equals("Completed")) {
 				existing.setPointsTotal(totalRemainingStoryPoints());
@@ -160,7 +160,7 @@ public class ProjectBurndown {
 				return sprint;
 			}
 		}
-		throw new RuntimeException("Project burndown does not contain sprint with number " + sprintNumber);
+		return null;
 	}
 
 	private ProjectBurndownSprint getActiveSprint() {
