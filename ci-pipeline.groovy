@@ -6,7 +6,8 @@ node("maven") {
 	stage("checkout") {
 		git branch: "master", url: "https://github.com/Estafet-LTD/estafet-microservices-scrum-api-project-burndown"
 	}
-
+	
+/*
 	stage("unit tests") {
 		try {
 			sh "mvn clean test"
@@ -14,6 +15,7 @@ node("maven") {
 			junit "**/target/surefire-reports/*.xml"
 		}
 	}
+*/
 
 	stage("update database") {
 		sh "oc get pods --selector app=postgresql -o json -n ${project} > pods.json"
