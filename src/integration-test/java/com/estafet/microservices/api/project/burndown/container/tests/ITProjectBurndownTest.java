@@ -35,6 +35,7 @@ public class ITProjectBurndownTest {
 			.body("title", equalTo("my project"));
 	}
 
+	@Ignore
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-data.xml")
 	public void testGetProjectBurndown() {
