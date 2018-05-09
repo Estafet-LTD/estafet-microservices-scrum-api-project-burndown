@@ -51,9 +51,7 @@ public class ITProjectBurndownTest {
 	@DatabaseSetup("ITProjectBurndownTest-empty.xml")
 	public void testNewProject() throws Exception {
 		NewProjectTopic.sendMessage("{ \"id\": 1, \"title\":\"My Project #1\",\"noSprints\":5,\"sprintLengthDays\":5 }");
-		Thread.sleep(5000);
-		//NewSprintTopic().sendMessage("{ \"id\": 1, \"startDate\": \"2017-10-01 00:00:00\", \"endDate\": \"2017-10-06 00:00:00\", \"number\": 1, \"status\": \"Active\",  \"projectId\": 1,  \"noDays\": 5 }");
-		//Thread.sleep(2000);
+		NewSprintTopic.sendMessage("{ \"id\": 1, \"startDate\": \"2017-10-01 00:00:00\", \"endDate\": \"2017-10-06 00:00:00\", \"number\": 1, \"status\": \"Active\",  \"projectId\": 1,  \"noDays\": 5 }");
 		get("/project/1/burndown").then()
 			.body("id", is(1))
 			.body("title", is("My Project #1"))

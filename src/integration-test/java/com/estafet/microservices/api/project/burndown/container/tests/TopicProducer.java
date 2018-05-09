@@ -14,6 +14,7 @@ public abstract class TopicProducer {
 
 	String topicName;
 	Connection connection;
+	Session session;
 
 	public TopicProducer(String topicName) {
 		this.topicName = topicName;
@@ -24,7 +25,7 @@ public abstract class TopicProducer {
 			ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(System.getenv("JBOSS_A_MQ_BROKER_URL"));
 			connection = connectionFactory.createConnection(System.getenv("JBOSS_A_MQ_BROKER_USER"),
 					System.getenv("JBOSS_A_MQ_BROKER_PASSWORD"));
-			Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 			Topic topic = session.createTopic(topicName);
 			MessageProducer messageProducer = session.createProducer(topic);
 			TextMessage textMessage = session.createTextMessage(message);
@@ -33,8 +34,11 @@ public abstract class TopicProducer {
 			throw new RuntimeException(e);
 		} finally {
 			try {
+				session.commit();
+				session.close();
 				connection.close();
-			} catch (JMSException e) {
+				Thread.sleep(2000);
+			} catch (JMSException | InterruptedException e) {
 				throw new RuntimeException(e);
 			}
 		}
