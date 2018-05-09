@@ -49,10 +49,10 @@ public class ProjectBurndownSprint {
 	@Transient
 	private Integer projectId;
 
-	@Column(name = "START_DATE")
+	@Column(name = "START_DATE", nullable = false)
 	private String startDate;
 
-	@Column(name = "END_DATE")
+	@Column(name = "END_DATE", nullable = false)
 	private String endDate;
 
 	public Integer getId() {

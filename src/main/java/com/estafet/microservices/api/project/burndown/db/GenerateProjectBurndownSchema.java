@@ -14,8 +14,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class GenerateProjectBurndownSchema {
 
 	public static void main(String[] args) throws IOException {
-		File create = new File("create-project-burndown-db.ddl");
-		File drop = new File("drop-project-burndown-db.ddl");
+		File create = new File("target", "create-project-burndown-db.ddl");
+		File drop = new File("target", "drop-project-burndown-db.ddl");
 		create.delete();
 		drop.delete();
 		new ClassPathXmlApplicationContext("project-burndown-entity-application-context.xml").close();
@@ -30,12 +30,12 @@ public class GenerateProjectBurndownSchema {
 			while ((sCurrentLine = br.readLine()) != null) {
 				lines.add(sCurrentLine + ";");
 			}
-			ddl.delete();
 		}
-		writeToFile(lines, ddl);
+		writeToFile(lines, new File(ddl.getName()));
 	}
 
 	private static void writeToFile(List<String> lines, File ddl) throws IOException {
+		ddl.delete();
 		for (String line : lines) {
 			try (BufferedWriter bw = new BufferedWriter(new FileWriter(ddl, true))) {
 				bw.write(line);
