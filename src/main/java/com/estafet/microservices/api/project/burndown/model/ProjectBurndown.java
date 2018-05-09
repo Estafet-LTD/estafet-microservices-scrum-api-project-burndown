@@ -56,6 +56,9 @@ public class ProjectBurndown {
 	@JsonIgnore
 	public ProjectBurndown getBurndown() {
 		sprints.add(new ProjectBurndownSprint().setNumber(0).setPointsTotal(this.initialPointsTotal));
+		for (ProjectBurndownSprint sprint : sprints) {
+			sprint.setProjectId(new Integer(id));
+		}
 		return this;
 	}
 

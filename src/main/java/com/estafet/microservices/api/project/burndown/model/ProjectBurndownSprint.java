@@ -37,7 +37,7 @@ public class ProjectBurndownSprint {
 
 	@Column(name = "STATUS", nullable = false)
 	private String status = "Not Started";
-	
+
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "PROJECT_BURNDOWN_ID", referencedColumnName = "PROJECT_BURNDOWN_ID")
@@ -65,6 +65,10 @@ public class ProjectBurndownSprint {
 
 	public Integer getProjectId() {
 		return projectId;
+	}
+
+	public void setProjectId(Integer projectId) {
+		this.projectId = projectId;
 	}
 
 	public ProjectBurndown getSprintProject() {
@@ -111,7 +115,6 @@ public class ProjectBurndownSprint {
 
 	void setSprintProject(ProjectBurndown sprintProject) {
 		this.sprintProject = sprintProject;
-		this.projectId = sprintProject.getId();
 	}
 
 	public static ProjectBurndownSprint fromJSON(String message) {
