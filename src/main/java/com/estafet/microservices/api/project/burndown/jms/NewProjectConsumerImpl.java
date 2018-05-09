@@ -25,6 +25,7 @@ public class NewProjectConsumerImpl implements NewProjectConsumer {
 	@JmsListener(destination = "new.project.topic", containerFactory = "myFactory")
 	public void onMessage(String message) {
 		try {
+			System.out.println(message);
 			projectBurndownService.newProject(ProjectBurndown.fromJSON(message));
 		} finally {
 			if (tracer.activeSpan() != null) {
