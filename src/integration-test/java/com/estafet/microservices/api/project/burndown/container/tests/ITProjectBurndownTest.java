@@ -114,10 +114,9 @@ public class ITProjectBurndownTest {
 			.body("sprints.status", hasItems("Not Started", "Active", "Not Started", "Not Started", "Not Started", "Not Started"));		
 	}
 
-	@Ignore
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-data.xml")
-	public void testUpdatedStoryConsumer() {
+	public void testCompletedSprint() {
 		NewProjectTopic.sendMessage("{ \"id\": 1, \"title\":\"My Project #1\",\"noSprints\":5,\"sprintLengthDays\":5 }");		
 		NewSprintTopic.sendMessage("{ \"id\": 1, \"startDate\": \"2017-10-01 00:00:00\", \"endDate\": \"2017-10-06 00:00:00\", \"number\": 1, \"status\": \"Active\",  \"projectId\": 1,  \"noDays\": 5 }");
 		NewStoryTopic.sendMessage("{ \"id\": 1, \"title\": \"some test story\",  \"description\": \"hghghg\",  \"storypoints\": 5,  \"projectId\": 1,  \"status\": \"Not Started\" }");
@@ -125,8 +124,18 @@ public class ITProjectBurndownTest {
 		NewStoryTopic.sendMessage("{ \"id\": 1, \"title\": \"some test story\",  \"description\": \"hghghg\",  \"storypoints\": 5,  \"projectId\": 1, \"sprintId\": 1,  \"status\": \"Not Started\" }");
 		NewStoryTopic.sendMessage("{ \"id\": 2, \"title\": \"another test story\",  \"description\": \"jhjhkhk\",  \"storypoints\": 20,  \"projectId\": 1, \"sprintId\": 1, \"status\": \"Not Started\" }");
 		NewStoryTopic.sendMessage("{ \"id\": 3, \"title\": \"yet another test story\",  \"description\": \"jjhhuyy\",  \"storypoints\": 8,  \"projectId\": 1, \"status\": \"Not Started\" }");
-		UpdatedStoryTopic.sendMessage("{ \"id\": 1, \"title\": \"some test story\",  \"description\": \"hghghg\",  \"storypoints\": 5,  \"projectId\": 1, \"sprintId\": 1,  \"status\": \"Not Started\" }");
-		UpdatedStoryTopic.sendMessage("{ \"id\": 2, \"title\": \"another test story\",  \"description\": \"jhjhkhk\",  \"storypoints\": 20,  \"projectId\": 1, \"sprintId\": 1, \"status\": \"Not Started\" }");
+		UpdatedStoryTopic.sendMessage("{ \"id\": 1, \"title\": \"some test story\",  \"description\": \"hghghg\",  \"storypoints\": 5,  \"projectId\": 1, \"sprintId\": 1,  \"status\": \"Completed\" }");
+		UpdatedStoryTopic.sendMessage("{ \"id\": 2, \"title\": \"another test story\",  \"description\": \"jhjhkhk\",  \"storypoints\": 20,  \"projectId\": 1, \"sprintId\": 1, \"status\": \"Completed\" }");
+		UpdatedSprintTopic.sendMessage("{ \"id\": 1, \"startDate\": \"2017-10-01 00:00:00\", \"endDate\": \"2017-10-06 00:00:00\", \"number\": 1, \"status\": \"Completed\",  \"projectId\": 1,  \"noDays\": 5 }");
+		UpdatedSprintTopic.sendMessage("{ \"id\": 2, \"startDate\": \"2017-10-01 00:00:00\", \"endDate\": \"2017-10-06 00:00:00\", \"number\": 1, \"status\": \"Active\",  \"projectId\": 1,  \"noDays\": 5 }");
+		get("/project/1/burndown").then()
+			.body("id", is(1))
+			.body("title", is("My Project #1"))
+			.body("sprints.number", hasItems(0, 1, 2, 3, 4, 5))
+			.body("sprints.pointsTotal", hasItems(33, 8, 0, 0, 0, 0))
+			.body("sprints.idealPointsTotal", hasItems(33.0f, 8.0f, 0.0f, 0.0f, 0.0f, 0.0f))
+			.body("sprints.status", hasItems("Not Started", "Completed", "Active", "Not Started", "Not Started", "Not Started"));
+		
 	}
 
 }
