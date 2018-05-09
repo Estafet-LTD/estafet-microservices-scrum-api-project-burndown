@@ -32,8 +32,8 @@ public class ProjectBurndownSprint {
 	@Column(name = "SPRINT_NUMBER", nullable = false)
 	private Integer number;
 
-	@Column(name = "POINTS_TOTAL")
-	private Integer pointsTotal;
+	@Column(name = "POINTS_TOTAL", nullable = false)
+	private Integer pointsTotal = 0;
 
 	@Column(name = "STATUS", nullable = false)
 	private String status = "Not Started";
@@ -111,6 +111,7 @@ public class ProjectBurndownSprint {
 
 	void setSprintProject(ProjectBurndown sprintProject) {
 		this.sprintProject = sprintProject;
+		this.projectId = sprintProject.getId();
 	}
 
 	public static ProjectBurndownSprint fromJSON(String message) {
