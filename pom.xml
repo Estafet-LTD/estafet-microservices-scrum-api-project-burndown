@@ -36,19 +36,47 @@
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<microservice>project-burndown</microservice>
 	</properties>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.estafet.microservices.api.project.burndown.db.GenerateDDL</mainClass>
+					<mainClass>com.estafet.microservices.db.GenerateDDL</mainClass>
 					<arguments>
-            			<argument>project-burndown</argument>
-          			</arguments>
+						<argument>${microservice}</argument>
+					</arguments>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>context-property</id>
+						<phase>verify</phase>
+						<configuration>
+							<target>
+								<replace
+									file="${basedir}/target/classes/generate-ddl-application-context.xml">
+									<replacefilter token="#microservice#"
+										value="${microservice}" />
+								</replace>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
