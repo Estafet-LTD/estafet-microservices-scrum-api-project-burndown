@@ -11,14 +11,15 @@ import java.util.List;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class GenerateProjectBurndownSchema {
+public class GenerateDDL {
 
 	public static void main(String[] args) throws IOException {
-		File create = new File("target", "create-project-burndown-db.ddl");
-		File drop = new File("target", "drop-project-burndown-db.ddl");
+		String microservice = args[0];
+		File create = new File("target", "create-" + microservice + "-db.ddl");
+		File drop = new File("target", "drop-" + microservice + "-db.ddl");
 		create.delete();
 		drop.delete();
-		new ClassPathXmlApplicationContext("project-burndown-entity-application-context.xml").close();
+		new ClassPathXmlApplicationContext(microservice + "-ddl-application-context.xml").close();
 		appendSemicolon(create);
 		appendSemicolon(drop);
 	}

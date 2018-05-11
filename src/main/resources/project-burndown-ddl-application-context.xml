@@ -34,10 +34,10 @@
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="org.postgresql.Driver" />
-		<property name="url" value="${PROJECT_BURNDOWN_REPOSITORY_JDBC_URL}" />
-		<property name="username" value="${PROJECT_BURNDOWN_REPOSITORY_DB_USER}" />
-		<property name="password" value="${PROJECT_BURNDOWN_REPOSITORY_DB_PASSWORD}" />
+		<property name="driverClassName" value="org.h2.Driver" />
+		<property name="url" value="jdbc:h2:mem:mydb;MODE=PostgreSQL" />
+		<property name="username" value="sa" />
+		<property name="password" value="" />
 	</bean>
 
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
