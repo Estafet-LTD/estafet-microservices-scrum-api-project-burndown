@@ -1,6 +1,6 @@
 package com.estafet.microservices.api.project.burndown.container.tests;
 
-public class NewStoryTopic extends TopicProducer {
+public class NewStoryTopic extends JMSTopic {
 	
 	private NewStoryTopic() {
 		super("new.story.topic");
