@@ -4,7 +4,6 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -45,7 +44,6 @@ public class ITProjectBurndownTest {
 			.body("sprints.idealPointsTotal", hasItems(235.0f, 117.5f, 0.0f));
 	}
 
-	@Ignore
 	@Test
 	@DatabaseSetup("ITProjectBurndownTest-data.xml")
 	public void testNewProject() {
@@ -69,8 +67,7 @@ public class ITProjectBurndownTest {
 			.body("title", is("My Project #1"))
 			.body("sprints.number", hasItems(0, 1, 2, 3, 4, 5))
 			.body("sprints.pointsTotal", hasItems(0, 0, 0, 0, 0, 0))
-			.body("sprints.idealPointsTotal", hasItems(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f))
-			.body("sprints.status", hasItems("Not Started", "Active", "Not Started", "Not Started", "Not Started", "Not Started"));
+			.body("sprints.idealPointsTotal", hasItems(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f));
 	}
 
 	@Test
