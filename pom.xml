@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>estafet-microservices-scrum</groupId>
 	<artifactId>estafet-microservices-scrum-api-project-burndown</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>estafet-microservices-scrum-api-project-burndown</name>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -321,7 +321,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/Estafet-LTD/estafet-microservices-scrum-api-project-burndown.git</connection>
 		<developerConnection>scm:git:https://github.com/Estafet-LTD/estafet-microservices-scrum-api-project-burndown.git</developerConnection>
-	  <tag>estafet-microservices-scrum-api-project-burndown-0.0.1</tag>
+	  <tag>HEAD</tag>
   </scm>
 
 </project>
