@@ -50,13 +50,20 @@ node("maven") {
 					"JBOSS_A_MQ_BROKER_USER=amq",
 					"JBOSS_A_MQ_BROKER_PASSWORD=amq"
 				]) {
+				withMaven(mavenSettingsConfig: 'microservices-scrum') {
 					sh "mvn clean verify -P integration-test"
 				}
-			} finally {
-				sh "oc set env dc/${microservice} JBOSS_A_MQ_BROKER_URL=tcp://localhost:61616 -n ${project}"
-				junit "**/target/failsafe-reports/*.xml"
-			}
+			}			
+		} finally {
+			sh "oc set env dc/${microservice} JBOSS_A_MQ_BROKER_URL=tcp://localhost:61616 -n ${project}"
+		}
 	}
+
+	stage("deploy snapshots") {
+		withMaven(mavenSettingsConfig: 'microservices-scrum') {
+ 			sh "mvn clean deploy -Dmaven.test.skip=true"
+		} 
+	}	
 	
 	stage("tag container for testing") {
 		openshiftTag namespace: project, srcStream: microservice, srcTag: 'latest', destinationNamespace: 'test', destinationStream: microservice, destinationTag: 'PrepareForTesting'
