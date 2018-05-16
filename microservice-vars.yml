@@ -10,7 +10,7 @@ db_user_env: PROJECT_BURNDOWN_REPOSITORY_DB_USER
 db_db_env: PROJECT_BURNDOWN_REPOSITORY_DB_PASSWORD    
 
 cpu_min: 50m
-cpu_max: 500m
+cpu_max: 1000m
 
 memory_min: 50Mi
 memory_max: 200Mi
