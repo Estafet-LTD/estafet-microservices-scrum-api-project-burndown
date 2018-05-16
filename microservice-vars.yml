@@ -13,4 +13,4 @@ cpu_min: 50m
 cpu_max: 500m
 
 memory_min: 50Mi
-memory_max: 150Mi
+memory_max: 200Mi
