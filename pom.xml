@@ -117,25 +117,6 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>context-property</id>
-						<phase>verify</phase>
-						<configuration>
-							<target>
-								<replace file="${basedir}/target/classes/generate-ddl-application-context.xml">
-									<replacefilter token="#microservice#" value="${microservice}" />
-								</replace>
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>

@@ -22,10 +22,8 @@ public class GenerateDDL {
 
 	public static void main(String[] args) throws IOException {
 		String microservice = getMicroserviceName();
-		File create = new File("target", "create-" + microservice + "-db.ddl");
-		File drop = new File("target", "drop-" + microservice + "-db.ddl");
-		create.delete();
-		drop.delete();
+		File create = new File("create-" + microservice + "-db.ddl");
+		File drop = new File("drop-" + microservice + "-db.ddl");
 		new ClassPathXmlApplicationContext("generate-ddl-application-context.xml").close();
 		appendSemicolon(create);
 		appendSemicolon(drop);

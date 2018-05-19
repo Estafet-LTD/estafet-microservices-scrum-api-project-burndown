@@ -1,5 +1,7 @@
 package com.estafet.microservices.api.project.burndown.container.tests;
 
+import java.util.UUID;
+
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
@@ -10,25 +12,22 @@ import javax.jms.Topic;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
-public abstract class JMSTopic {
+public abstract class TopicProducer {
 
 	String topicName;
 	Connection connection;
 	Session session;
-
-	public JMSTopic(String topicName) {
+	
+	public TopicProducer(String topicName) {
 		this.topicName = topicName;
 	}
 
-	public void send(String message) {
+	public void sendMessage(String message) {
 		try {
-			ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(System.getenv("JBOSS_A_MQ_BROKER_URL"));
-			connection = connectionFactory.createConnection(System.getenv("JBOSS_A_MQ_BROKER_USER"),
-					System.getenv("JBOSS_A_MQ_BROKER_PASSWORD"));
-			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-			Topic topic = session.createTopic(topicName);
+			Topic topic = createTopic();
 			MessageProducer messageProducer = session.createProducer(topic);
 			TextMessage textMessage = session.createTextMessage(message);
+			textMessage.setStringProperty("message.event.interaction.reference", UUID.randomUUID().toString());
 			messageProducer.send(textMessage);
 		} catch (JMSException e) {
 			throw new RuntimeException(e);
@@ -41,5 +40,15 @@ public abstract class JMSTopic {
 			}
 		}
 	}
+
+	private Topic createTopic() throws JMSException {
+		ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(System.getenv("JBOSS_A_MQ_BROKER_URL"));
+		connection = connectionFactory.createConnection(System.getenv("JBOSS_A_MQ_BROKER_USER"),
+				System.getenv("JBOSS_A_MQ_BROKER_PASSWORD"));
+		session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+		Topic topic = session.createTopic(topicName);
+		return topic;
+	}
+
 
 }
