@@ -4,3 +4,5 @@
 /.project
 /src/main/java/META-INF
 /.springBeans
+/release-pipeline.groovy.bak
+/createdb.sh
