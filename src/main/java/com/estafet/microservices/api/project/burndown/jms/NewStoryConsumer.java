@@ -14,6 +14,8 @@ import io.opentracing.Tracer;
 @Component
 public class NewStoryConsumer {
 
+	public final static String TOPIC = "new.story.topic";
+	
 	@Autowired
 	private Tracer tracer;
 	
@@ -23,10 +25,10 @@ public class NewStoryConsumer {
 	@Autowired
 	private MessageEventHandler messageEventHandler;
 
-	@JmsListener(destination = "new.story.topic", containerFactory = "myFactory")
+	@JmsListener(destination = TOPIC, containerFactory = "myFactory")
 	public void onMessage(String message, @Header("message.event.interaction.reference") String reference) {
 		try {
-			if (messageEventHandler.isValid("new.sprint.topic", reference)) {
+			if (messageEventHandler.isValid(TOPIC, reference)) {
 				projectBurndownService.updateBurndown(Story.fromJSON(message));	
 			}
 		} finally {
