@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -28,7 +29,7 @@ public class Story {
 
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "PROJECT_BURNDOWN_ID", referencedColumnName = "PROJECT_BURNDOWN_ID")
+	@JoinColumn(name = "PROJECT_BURNDOWN_ID", referencedColumnName = "PROJECT_BURNDOWN_ID", foreignKey = @ForeignKey(name = "PB_STORY_TO_PROJECT_BURNDOWN_FK"))
 	private ProjectBurndown storyProject;
 
 	@Transient

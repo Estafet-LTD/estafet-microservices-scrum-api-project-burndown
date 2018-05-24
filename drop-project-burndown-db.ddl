@@ -1,5 +1,5 @@
-alter table PROJECT_BURNDOWN_SPRINT drop constraint FKn77qpxpo7dea3cplo0lap3vjh;
-alter table PROJECT_BURNDOWN_STORY drop constraint FK9qnyfpkfqdxhupt17x4e5j9o5;
+alter table PROJECT_BURNDOWN_SPRINT drop constraint PB_SPRINT_TO_PROJECT_BURNDOWN_FK;
+alter table PROJECT_BURNDOWN_STORY drop constraint PB_STORY_TO_PROJECT_BURNDOWN_FK;
 drop table if exists MESSAGE_EVENT cascade;
 drop table if exists PROJECT_BURNDOWN cascade;
 drop table if exists PROJECT_BURNDOWN_SPRINT cascade;

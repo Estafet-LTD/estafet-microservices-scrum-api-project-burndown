@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,7 +41,7 @@ public class ProjectBurndownSprint {
 
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "PROJECT_BURNDOWN_ID", referencedColumnName = "PROJECT_BURNDOWN_ID")
+	@JoinColumn(name = "PROJECT_BURNDOWN_ID", referencedColumnName = "PROJECT_BURNDOWN_ID", foreignKey = @ForeignKey(name = "PB_SPRINT_TO_PROJECT_BURNDOWN_FK"))
 	private ProjectBurndown sprintProject;
 
 	@Transient
