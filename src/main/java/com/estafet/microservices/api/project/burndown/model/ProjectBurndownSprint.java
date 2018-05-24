@@ -68,8 +68,9 @@ public class ProjectBurndownSprint {
 		return projectId;
 	}
 
-	public void setProjectId(Integer projectId) {
+	public ProjectBurndownSprint setProjectId(Integer projectId) {
 		this.projectId = projectId;
+		return this;
 	}
 
 	public ProjectBurndown getSprintProject() {
@@ -96,8 +97,9 @@ public class ProjectBurndownSprint {
 		return endDate;
 	}
 
-	public void setStatus(String status) {
+	public ProjectBurndownSprint setStatus(String status) {
 		this.status = status;
+		return this;
 	}
 
 	public ProjectBurndownSprint setNumber(Integer number) {
@@ -107,6 +109,16 @@ public class ProjectBurndownSprint {
 
 	public ProjectBurndownSprint setPointsTotal(Integer pointsTotal) {
 		this.pointsTotal = pointsTotal;
+		return this;
+	}
+
+	public ProjectBurndownSprint setStartDate(String startDate) {
+		this.startDate = startDate;
+		return this;
+	}
+
+	public ProjectBurndownSprint setEndDate(String endDate) {
+		this.endDate = endDate;
 		return this;
 	}
 

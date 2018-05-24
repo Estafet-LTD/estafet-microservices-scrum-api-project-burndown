@@ -23,11 +23,7 @@
 			"spec": {
 				"containers": [
 					{
-						"env": [
-							{
-								"name": "SPRINT_API_SERVICE_URI",
-								"value": "http://sprint-api.test.svc:8080"
-							},						
+						"env": [				
 							{
 								"name": "JBOSS_A_MQ_BROKER_PASSWORD",
 								"value": "amq"

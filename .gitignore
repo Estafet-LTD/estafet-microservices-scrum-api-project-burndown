@@ -6,3 +6,4 @@
 /.springBeans
 /release-pipeline.groovy.bak
 /createdb.sh
+/ci-pipeline.groovy.bak

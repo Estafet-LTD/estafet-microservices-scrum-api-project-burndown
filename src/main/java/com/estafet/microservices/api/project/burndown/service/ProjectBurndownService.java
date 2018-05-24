@@ -6,24 +6,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import com.estafet.microservices.api.project.burndown.dao.ProjectBurndownDAO;
-import com.estafet.microservices.api.project.burndown.messages.CalculateSprints;
+import com.estafet.microservices.api.project.burndown.date.CalculatedSprint;
+import com.estafet.microservices.api.project.burndown.date.DateHelper;
 import com.estafet.microservices.api.project.burndown.model.ProjectBurndown;
 import com.estafet.microservices.api.project.burndown.model.ProjectBurndownSprint;
 import com.estafet.microservices.api.project.burndown.model.Story;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class ProjectBurndownService {
 
 	@Autowired
 	private ProjectBurndownDAO projectBurndownDAO;
-
-	@Autowired
-	private RestTemplate restTemplate;
 
 	@Transactional(readOnly = true)
 	public ProjectBurndown getProjectBurndown(int id) {
@@ -48,18 +43,16 @@ public class ProjectBurndownService {
 		projectBurndownDAO.update(projectBurndown.update(sprint));
 	}
 
-	@SuppressWarnings("rawtypes")
 	public List<ProjectBurndownSprint> calculateSprints(ProjectBurndown burndown) {
-		CalculateSprints message = new CalculateSprints(burndown.getId(), burndown.getSprintLengthDays(),
+		List<CalculatedSprint> calculatedSprints = DateHelper.calculateSprints(burndown.getSprintLengthDays(),
 				burndown.getNoSprints());
-		List objects = restTemplate.postForObject(System.getenv("SPRINT_API_SERVICE_URI") + "/calculate-sprints",
-				message, List.class);
-		List<ProjectBurndownSprint> sprints = new ArrayList<ProjectBurndownSprint>();
-		ObjectMapper mapper = new ObjectMapper();
-		for (Object object : objects) {
-			ProjectBurndownSprint sprint = mapper.convertValue(object, new TypeReference<ProjectBurndownSprint>() {
-			});
-			sprints.add(sprint);
+		List<ProjectBurndownSprint> sprints = new ArrayList<ProjectBurndownSprint>(calculatedSprints.size());
+		for (CalculatedSprint calculatedSprint : calculatedSprints) {
+			ProjectBurndownSprint sprint = new ProjectBurndownSprint();
+			sprint.setNumber(calculatedSprint.getNumber());
+			sprint.setProjectId(burndown.getId());
+			sprint.setEndDate(calculatedSprint.getEndDate());
+			sprint.setStartDate(calculatedSprint.getStartDate());
 		}
 		return sprints;
 	}
