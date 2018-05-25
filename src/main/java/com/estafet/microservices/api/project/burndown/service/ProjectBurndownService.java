@@ -53,6 +53,7 @@ public class ProjectBurndownService {
 			sprint.setProjectId(burndown.getId());
 			sprint.setEndDate(calculatedSprint.getEndDate());
 			sprint.setStartDate(calculatedSprint.getStartDate());
+			sprints.add(sprint);
 		}
 		return sprints;
 	}
