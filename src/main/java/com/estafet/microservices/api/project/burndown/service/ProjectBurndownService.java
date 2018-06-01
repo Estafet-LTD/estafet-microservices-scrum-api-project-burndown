@@ -43,7 +43,7 @@ public class ProjectBurndownService {
 		projectBurndownDAO.update(projectBurndown.update(sprint));
 	}
 
-	public List<ProjectBurndownSprint> calculateSprints(ProjectBurndown burndown) {
+	private List<ProjectBurndownSprint> calculateSprints(ProjectBurndown burndown) {
 		List<CalculatedSprint> calculatedSprints = DateHelper.calculateSprints(burndown.getSprintLengthDays(),
 				burndown.getNoSprints());
 		List<ProjectBurndownSprint> sprints = new ArrayList<ProjectBurndownSprint>(calculatedSprints.size());
