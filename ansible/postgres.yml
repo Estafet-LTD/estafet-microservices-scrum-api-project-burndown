@@ -14,7 +14,7 @@
   set_fact: db_ip="{{list_of_db_services.stdout|from_json|json_query('spec.clusterIP')}}"
   
 - name: Copy ddl to PostgreSQL Pod
-  shell: 'oc rsync --no-perms=true --include="*.ddl" --exclude="*" {{ workdir }}/{{ repo }}/ {{db_pod}}:/tmp'
+  shell: 'oc rsync --no-perms=true --include="*.ddl" --exclude="*" {{ workdir }}/{{ repo }}/ddl/ {{db_pod}}:/tmp'
   register: command_result
   failed_when: "'exists' not in command_result.stderr and command_result.rc != 0"
   changed_when: "'exists' not in command_result.stderr"
