@@ -16,7 +16,7 @@ spec:
       uri: "https://github.com/Estafet-LTD/estafet-microservices-scrum-api-project-burndown"
   strategy:
     jenkinsPipelineStrategy:
-      jenkinsfilePath: ci-pipeline.groovy
+      jenkinsfilePath: pipelines/ci-pipeline.groovy
     type: JenkinsPipeline
   triggers:
   - github:

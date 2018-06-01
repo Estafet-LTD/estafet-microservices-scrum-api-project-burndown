@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="Dennis (generated)" id="1527796350719-1">
+        <createSequence sequenceName="project_burndown_sprint_id_seq"/>
+    </changeSet>
+    <changeSet author="Dennis (generated)" id="1527796350719-2">
+        <createTable tableName="message_event">
+            <column name="topic_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message_reference" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Dennis (generated)" id="1527796350719-3">
+        <createTable tableName="project_burndown">
+            <column name="project_burndown_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="initial_points_total" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Dennis (generated)" id="1527796350719-4">
+        <createTable tableName="project_burndown_sprint">
+            <column name="project_burndown_sprint_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sprint_number" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="points_total" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="project_burndown_id" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Dennis (generated)" id="1527796350719-5">
+        <createTable tableName="project_burndown_story">
+            <column name="project_burndown_story_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="story_points" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="project_burndown_id" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Dennis (generated)" id="1527796350719-6">
+        <addPrimaryKey columnNames="topic_id" constraintName="message_event_pkey" tableName="message_event"/>
+    </changeSet>
+    <changeSet author="Dennis (generated)" id="1527796350719-7">
+        <addPrimaryKey columnNames="project_burndown_id" constraintName="project_burndown_pkey" tableName="project_burndown"/>
+    </changeSet>
+    <changeSet author="Dennis (generated)" id="1527796350719-8">
+        <addPrimaryKey columnNames="project_burndown_sprint_id" constraintName="project_burndown_sprint_pkey" tableName="project_burndown_sprint"/>
+    </changeSet>
+    <changeSet author="Dennis (generated)" id="1527796350719-9">
+        <addPrimaryKey columnNames="project_burndown_story_id" constraintName="project_burndown_story_pkey" tableName="project_burndown_story"/>
+    </changeSet>
+    <changeSet author="Dennis (generated)" id="1527796350719-10">
+        <addForeignKeyConstraint baseColumnNames="project_burndown_id" baseTableName="project_burndown_sprint" constraintName="pb_sprint_to_project_burndown_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="project_burndown_id" referencedTableName="project_burndown"/>
+    </changeSet>
+    <changeSet author="Dennis (generated)" id="1527796350719-11">
+        <addForeignKeyConstraint baseColumnNames="project_burndown_id" baseTableName="project_burndown_story" constraintName="pb_story_to_project_burndown_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="project_burndown_id" referencedTableName="project_burndown"/>
+    </changeSet>
+</databaseChangeLog>

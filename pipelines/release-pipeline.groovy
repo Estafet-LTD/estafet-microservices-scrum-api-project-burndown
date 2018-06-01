@@ -63,8 +63,8 @@ node('maven') {
 		def pod = new groovy.json.JsonSlurper().parseText(json).items[0].metadata.name	
 		def template = readFile ('createdb.sh.template').replaceAll(/\$\{microservice\}/, microservice)
 		writeFile file:"createdb.sh", text:template
-		sh "oc rsync --no-perms=true --include=\"*.ddl\" --exclude=\"*\" ./ ${pod}:/tmp -n ${project}"	
-		sh "oc rsync --no-perms=true --include=\"createdb.sh\" --exclude=\"*\" ./ ${pod}:/tmp -n ${project}"	
+		sh "oc rsync --no-perms=true --include=\"*.ddl\" --exclude=\"*\" ddl/ ${pod}:/tmp -n ${project}"	
+		sh "oc rsync --no-perms=true --include=\"createdb.sh\" --exclude=\"*\" ddl/ ${pod}:/tmp -n ${project}"	
 		sh "oc exec ${pod}  -n ${project} -- /bin/sh -i -c \"chmod +x /tmp/createdb.sh\""
 		sh "oc exec ${pod}  -n ${project} -- /bin/sh -i -c \"/tmp/createdb.sh\""
 		sh "oc exec ${pod}  -n ${project} -- /bin/sh -i -c \"psql -d ${microservice} -U postgres -f /tmp/drop-${microservice}-db.ddl\""
@@ -80,8 +80,8 @@ node('maven') {
 		if (deploymentConfigurationExists (dc, microservice)) {
 			openshiftDeploy namespace: project, depCfg: microservice
 		} else {
-			def template = readFile ('test-deployment-config.json').replaceAll(/\$\{image\}/, image).replaceAll(/\$\{microservice\}/, microservice)
-			def serviceTemplate = readFile ('test-service-config.yaml').replaceAll(/\$\{microservice\}/, microservice)
+			def template = readFile ('openshift/test-deployment-config.json').replaceAll(/\$\{image\}/, image).replaceAll(/\$\{microservice\}/, microservice)
+			def serviceTemplate = readFile ('openshift/test-service-config.yaml').replaceAll(/\$\{microservice\}/, microservice)
 			openshiftCreateResource namespace:project, jsonyaml:template
 			openshiftCreateResource namespace:project, jsonyaml:serviceTemplate
 		}

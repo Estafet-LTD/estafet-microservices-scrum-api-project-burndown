@@ -13,7 +13,7 @@ node("maven") {
 		sh "oc get pods --selector app=postgresql -o json -n ${project} > pods.json"
 		def json = readFile('pods.json');
 		def pod = new groovy.json.JsonSlurper().parseText(json).items[0].metadata.name
-		sh "oc rsync --no-perms=true --include=\"*.ddl\" --exclude=\"*\" ./ ${pod}:/tmp -n ${project}"
+		sh "oc rsync --no-perms=true --include=\"*.ddl\" --exclude=\"*\" ddl/ ${pod}:/tmp -n ${project}"
 		sh "oc exec ${pod}  -n ${project} -- /bin/sh -i -c \"psql -d ${microservice} -U postgres -f /tmp/drop-${microservice}-db.ddl\""
 		sh "oc exec ${pod}  -n ${project} -- /bin/sh -i -c \"psql -d ${microservice} -U postgres -f /tmp/create-${microservice}-db.ddl\""
 	}

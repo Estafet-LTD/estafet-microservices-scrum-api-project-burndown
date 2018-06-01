@@ -26,8 +26,8 @@
 				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
 				<prop key="javax.persistence.schema-generation.database.action">none</prop>
 				<prop key="javax.persistence.schema-generation.scripts.action">drop-and-create</prop>
-				<prop key="javax.persistence.schema-generation.scripts.create-target">create-project-burndown-db.ddl</prop>
-				<prop key="javax.persistence.schema-generation.scripts.drop-target">drop-project-burndown-db.ddl</prop>
+				<prop key="javax.persistence.schema-generation.scripts.create-target">ddl/create-project-burndown-db.ddl</prop>
+				<prop key="javax.persistence.schema-generation.scripts.drop-target">ddl/drop-project-burndown-db.ddl</prop>
 			</props>
 		</property>
 	</bean>

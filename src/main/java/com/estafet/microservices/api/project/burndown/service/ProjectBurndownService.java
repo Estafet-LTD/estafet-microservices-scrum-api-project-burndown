@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.estafet.microservices.api.project.burndown.dao.ProjectBurndownDAO;
-import com.estafet.microservices.api.project.burndown.date.CalculatedSprint;
-import com.estafet.microservices.api.project.burndown.date.DateHelper;
 import com.estafet.microservices.api.project.burndown.model.ProjectBurndown;
 import com.estafet.microservices.api.project.burndown.model.ProjectBurndownSprint;
 import com.estafet.microservices.api.project.burndown.model.Story;
+import com.estafet.microservices.scrum.lib.commons.date.CalculatedSprint;
+import com.estafet.microservices.scrum.lib.commons.date.DateHelper;
 
 @Component
 public class ProjectBurndownService {

@@ -4,6 +4,7 @@
 	<artifactId>microservices-scrum-project-burndown</artifactId>
 	<version>0.0.9-SNAPSHOT</version>
 	<name>estafet-microservices-scrum-api-project-burndown</name>
+	
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -81,6 +82,82 @@
 		</resources>
 		<plugins>
 			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>3.6.1</version>
+				<configuration>
+					<driver>org.postgresql.Driver</driver>
+					<url>${env.PROJECT_BURNDOWN_REPOSITORY_JDBC_URL}</url>
+					<username>${env.PROJECT_BURNDOWN_REPOSITORY_DB_USER}</username>
+					<password>${env.PROJECT_BURNDOWN_REPOSITORY_DB_PASSWORD}</password>
+					<changeLogFile>liquibase/db-changelog-master.xml</changeLogFile>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>update</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>		
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>3.6.1</version>
+				<configuration>
+					<driver>org.postgresql.Driver</driver>
+					<url>jdbc:postgresql://localhost:5432/${microservice}</url>
+					<username>postgres</username>
+					<password>welcome1</password>
+					<outputChangeLogFile>liquibase/db-changelog.xml</outputChangeLogFile>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generateChangeLog</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>3.4.1</version>
+				<configuration>
+					<driver>org.postgresql.Driver</driver>
+					<url>jdbc:postgresql://localhost:5432/${microservice}</url>
+					<username>postgres</username>
+					<password>welcome1</password>
+					<changeLogFile>liquibase/db-changelog-master.xml</changeLogFile>
+					<diffChangeLogFile>liquibase/liquibase-diff-changeLog.xml</diffChangeLogFile>
+					<referenceUrl>hibernate:spring:com.estafet.microservices.api.project.burndown.model?dialect=org.hibernate.dialect.PostgreSQLDialect</referenceUrl>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.liquibase.ext</groupId>
+						<artifactId>liquibase-hibernate4</artifactId>
+						<version>3.5</version>
+					</dependency>
+					<dependency>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-beans</artifactId>
+						<version>4.1.7.RELEASE</version>
+					</dependency>
+					<dependency>
+						<groupId>org.springframework.data</groupId>
+						<artifactId>spring-data-jpa</artifactId>
+						<version>1.7.3.RELEASE</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<goals>
+							<goal>diff</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>		
+			<plugin>
 			   <groupId>org.apache.maven.plugins</groupId>
 			   <artifactId>maven-deploy-plugin</artifactId>
 			   <configuration>
@@ -110,7 +187,7 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.estafet.microservices.db.GenerateDDL</mainClass>
+					<mainClass>com.estafet.microservices.scrum.lib.data.db.GenerateDDL</mainClass>
 					<arguments>
 						<argument>${microservice}</argument>
 					</arguments>
@@ -257,6 +334,16 @@
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.estafet.microservices.scrum</groupId>
+			<artifactId>microservices-scrum-data-lib</artifactId>
+			<version>1.0.4</version>
+		</dependency>		
+		<dependency>
+			<groupId>com.estafet.microservices.scrum</groupId>
+			<artifactId>microservices-scrum-commons-lib</artifactId>
+			<version>1.0.0</version>
+		</dependency>		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

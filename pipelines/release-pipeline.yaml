@@ -16,7 +16,7 @@ spec:
       uri: "https://github.com/Estafet-LTD/estafet-microservices-scrum-api-project-burndown"
   strategy:
     jenkinsPipelineStrategy:
-      jenkinsfilePath: release-pipeline.groovy
+      jenkinsfilePath: pipelines/release-pipeline.groovy
     type: JenkinsPipeline
 status:
   lastVersion: 0
