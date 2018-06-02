@@ -1,0 +1,131 @@
+{
+	"kind": "DeploymentConfig",
+	"metadata": {
+		"labels": {
+			"app": "project-burndown"
+		},
+		"name": "project-burndown"
+	},
+	"spec": {
+		"strategy": {
+			"type": "Recreate",
+			"recreateParams": {
+				"timeoutSeconds": 60,
+				"pre": {
+					"failurePolicy": "Ignore",
+					"execNewPod": {
+						"command": [
+							"sh",
+							"-c",
+							"cd /tmp/src \u0026\u0026 /opt/rh/rh-maven33/root/usr/share/maven/bin/mvn resources:resources liquibase:update -Dmaven.repo.local=/tmp/artifacts/m2 -s /tmp/artifacts/configuration/settings.xml"
+						],
+						"containerName": "project-burndown"
+					}
+				}
+			},
+			"resources": {
+				
+			}
+		},
+		"replicas": "1",
+		"revisionHistoryLimit": "10",
+		"selector": {
+			"app": "project-burndown",
+			"deploymentconfig": "project-burndown"
+		},
+		"template": {
+			"metadata": {
+				"labels": {
+					"app": "project-burndown",
+					"deploymentconfig": "project-burndown"
+				}
+			},
+			"spec": {
+				"containers": [
+					{
+						"env": [
+							{
+								"name": "JBOSS_A_MQ_BROKER_PASSWORD",
+								"value": "amq"
+							},
+							{
+								"name": "JBOSS_A_MQ_BROKER_URL",
+								"value": "tcp://broker-amq-tcp.test.svc:61616"
+							},
+							{
+								"name": "JBOSS_A_MQ_BROKER_USER",
+								"value": "amq"
+							},
+							{
+								"name": "PROJECT_BURNDOWN_REPOSITORY_DB_PASSWORD",
+								"value": "welcome1"
+							},
+							{
+								"name": "PROJECT_BURNDOWN_REPOSITORY_DB_USER",
+								"value": "postgres"
+							},
+							{
+								"name": "PROJECT_BURNDOWN_REPOSITORY_JDBC_URL",
+								"value": "jdbc:postgresql://postgresql.prod.svc:5432/project-burndown"
+							},
+							{
+								"name": "JAEGER_SAMPLER_TYPE",
+								"value": "const"
+							},
+							{
+								"name": "JAEGER_SAMPLER_PARAM",
+								"value": "1"
+							},
+							{
+								"name": "JAEGER_SAMPLER_MANAGER_HOST_PORT",
+								"value": "jaeger-agent.prod.svc:5778"
+							},
+							{
+								"name": "JAEGER_AGENT_HOST",
+								"value": "jaeger-agent.prod.svc"
+							}
+						],
+						"name": "project-burndown",
+						"imagePullPolicy": "Always",
+						"ports": [
+							{
+								"containerPort": "8080",
+								"protocol": "TCP"
+							},
+							{
+								"containerPort": "8443",
+								"protocol": "TCP"
+							},
+							{
+								"containerPort": "8778",
+								"protocol": "TCP"
+							}
+						],
+						"readinessProbe": {
+							"failureThreshold": "10",
+							"initialDelaySeconds": "90",
+							"periodSeconds": "30",
+							"successThreshold": "1",
+							"timeoutSeconds": "1",
+							"httpGet": {
+								"path": "/api",
+								"port": 8080,
+								"scheme": "HTTP"
+							}
+						},
+						"resources": {
+							"limits": {
+								"cpu": "1000m",
+								"memory": "200Mi"
+							},
+							"requests": {
+								"cpu": "50m",
+								"memory": "50Mi"
+							}
+						}
+					}
+				]
+			}
+		}
+	}
+}
