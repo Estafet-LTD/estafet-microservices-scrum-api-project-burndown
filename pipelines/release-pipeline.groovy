@@ -38,8 +38,8 @@ node('maven') {
 		sh "oc get pods --selector app=postgresql -o json -n ${project} > pods.json"
 		def json = readFile('pods.json')
 		def pod = new groovy.json.JsonSlurper().parseText(json).items[0].metadata.name	
-		def template = readFile ('createdb.sh.template').replaceAll(/\$\{microservice\}/, microservice)
-		writeFile file:"createdb.sh", text:template
+		def template = readFile ('ddl/createdb.sh.template').replaceAll(/\$\{microservice\}/, microservice)
+		writeFile file:"ddl/createdb.sh", text:template
 		sh "oc rsync --no-perms=true --include=\"*.ddl\" --exclude=\"*\" ddl/ ${pod}:/tmp -n ${project}"	
 		sh "oc rsync --no-perms=true --include=\"createdb.sh\" --exclude=\"*\" ddl/ ${pod}:/tmp -n ${project}"	
 		sh "oc exec ${pod}  -n ${project} -- /bin/sh -i -c \"chmod +x /tmp/createdb.sh\""
