@@ -7,6 +7,9 @@
 		"name": "${microservice}"
 	},
 	"spec": {
+		"strategy": {
+			"type": "Recreate"
+		},
 		"replicas": "1",
 		"revisionHistoryLimit": "10",
 		"selector": {
