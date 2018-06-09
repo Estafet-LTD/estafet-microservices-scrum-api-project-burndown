@@ -3,8 +3,6 @@
   include_vars:
     file: microservice-vars.yml  
     
-- include: postgres.yml 
-- include: a-mq-vars.yml
 - include: service-envs-{{ project }}.yml  
 
 - set_fact: branch="master"
