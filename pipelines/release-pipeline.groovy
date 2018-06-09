@@ -33,20 +33,6 @@ node('maven') {
 	stage("checkout") {
 		git branch: "master", url: "https://${username()}:${password()}@github.com/Estafet-LTD/estafet-microservices-scrum-api-project-burndown"
 	}
-
-	stage("update database") {
-		sh "oc get pods --selector app=postgresql -o json -n ${project} > pods.json"
-		def json = readFile('pods.json')
-		def pod = new groovy.json.JsonSlurper().parseText(json).items[0].metadata.name	
-		def template = readFile ('ddl/createdb.sh.template').replaceAll(/\$\{microservice\}/, microservice)
-		writeFile file:"ddl/createdb.sh", text:template
-		sh "oc rsync --no-perms=true --include=\"*.ddl\" --exclude=\"*\" ddl/ ${pod}:/tmp -n ${project}"	
-		sh "oc rsync --no-perms=true --include=\"createdb.sh\" --exclude=\"*\" ddl/ ${pod}:/tmp -n ${project}"	
-		sh "oc exec ${pod}  -n ${project} -- /bin/sh -i -c \"chmod +x /tmp/createdb.sh\""
-		sh "oc exec ${pod}  -n ${project} -- /bin/sh -i -c \"/tmp/createdb.sh\""
-		sh "oc exec ${pod}  -n ${project} -- /bin/sh -i -c \"psql -d ${microservice} -U postgres -f /tmp/drop-${microservice}-db.ddl\""
-		sh "oc exec ${pod}  -n ${project} -- /bin/sh -i -c \"psql -d ${microservice} -U postgres -f /tmp/create-${microservice}-db.ddl\""
-	}	
 	
 	stage("deploy container") {
 		sh "oc get is -o json -n ${project} > is.json"

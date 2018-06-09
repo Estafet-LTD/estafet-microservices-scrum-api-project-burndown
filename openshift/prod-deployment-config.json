@@ -9,24 +9,7 @@
 	},
 	"spec": {
 		"strategy": {
-			"type": "Recreate",
-			"recreateParams": {
-				"timeoutSeconds": 60,
-				"pre": {
-					"failurePolicy": "Ignore",
-					"execNewPod": {
-						"command": [
-							"sh",
-							"-c",
-							"cd /tmp/src \u0026\u0026 /opt/rh/rh-maven33/root/usr/share/maven/bin/mvn resources:resources liquibase:update -Dmaven.repo.local=/tmp/artifacts/m2 -s /tmp/artifacts/configuration/settings.xml"
-						],
-						"containerName": "project-burndown"
-					}
-				}
-			},
-			"resources": {
-				
-			}
+			"type": "Recreate"
 		},
 		"replicas": "1",
 		"revisionHistoryLimit": "10",
