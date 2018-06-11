@@ -8,6 +8,14 @@ Each microservice has it's own git repository, but there is a master git reposit
 You can find a detailed explanation of how to install this (and other microservices) [here](https://github.com/Estafet-LTD/estafet-microservices-scrum#getting-started).
 ## API Interface
 
+|Topic               |Direction |Event                                                                                 |Message Type       |
+|--------------------|----------|--------------------------------------------------------------------------------------|-------------------|
+|new.project.topic   |Consumer  |When a project is created, a new burndown for that project is initialised             |Project JSON Object|
+|new.sprint.topic    |Consumer  |When a sprint is created, the project burn down will be updated                       |Project JSON Object|
+|new.story.topic     |Consumer  |When a story is created, the points total for the existing sprint will be incremented |Project JSON Object|
+|update.story.topic  |Consumer  |When a story is updated, the points total for the existing sprint will be incremented |Project JSON Object|
+|update.sprint.topic |Consumer  |When a sprint is updated, the points total for the existing sprint will be incremented|Project JSON Object|
+
 ### Project Burndown JSON object
 
 ```json
@@ -36,7 +44,7 @@ You can find a detailed explanation of how to install this (and other microservi
 To retrieve an example the project burndown object (useful for testing to see the microservice is online).
 
 ```
-GET http://project-burndown/burndown
+GET http://project-burndownuri/api
 ```
 
 To retrieve a project burndown a project that has an id = 4
@@ -47,16 +55,12 @@ GET http://project-burndown/project/4/burndown
 
 ## Environment Variables
 ```
-JBOSS_A_MQ_BROKER_URL=tcp://localhost:61616
-JBOSS_A_MQ_BROKER_USER=estafet
-JBOSS_A_MQ_BROKER_PASSWORD=estafet
+JBOSS_A_MQ_BROKER_URL
+JBOSS_A_MQ_BROKER_USER
+JBOSS_A_MQ_BROKER_PASSWORD
 
-PROJECT_BURNDOWN_REPOSITORY_JDBC_URL=jdbc:postgresql://localhost:5432/project-burndown
-PROJECT_BURNDOWN_REPOSITORY_DB_USER=postgres
-PROJECT_BURNDOWN_REPOSITORY_DB_PASSWORD=welcome1
-
-PROJECT_API_SERVICE_URI=http://localhost:9000
-SPRINT_API_SERVICE_URI=http://localhost:9002
-STORY_API_SERVICE_URI=http://localhost:8080/story-api
+PROJECT_BURNDOWN_REPOSITORY_JDBC_URL
+PROJECT_BURNDOWN_REPOSITORY_DB_USER
+PROJECT_BURNDOWN_REPOSITORY_DB_PASSWORD
 ```
 
