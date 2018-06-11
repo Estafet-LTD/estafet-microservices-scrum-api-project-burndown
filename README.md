@@ -44,13 +44,13 @@ You can find a detailed explanation of how to install this (and other microservi
 To retrieve an example the project burndown object (useful for testing to see the microservice is online).
 
 ```
-GET http://project-burndownuri/api
+GET http://<project-burndown-uri>/api
 ```
 
 To retrieve a project burndown a project that has an id = 4
 
 ```
-GET http://project-burndown/project/4/burndown
+GET http://<project-burndown-uri>/project/4/burndown
 ```
 
 ## Environment Variables
