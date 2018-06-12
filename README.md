@@ -8,6 +8,8 @@ Each microservice has it's own git repository, but there is a master git reposit
 You can find a detailed explanation of how to install this (and other microservices) [here](https://github.com/Estafet-LTD/estafet-microservices-scrum#getting-started).
 ## API Interface
 
+### Messaging
+
 |Topic               |Direction |Event                                                                                 |Message Type       |
 |--------------------|----------|--------------------------------------------------------------------------------------|-------------------|
 |new.project.topic   |Consumer  |When a project is created, a new burndown for that project is initialised             |Project JSON Object|
