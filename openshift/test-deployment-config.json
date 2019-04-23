@@ -49,7 +49,7 @@
 							},
 							{
 								"name": "PROJECT_BURNDOWN_REPOSITORY_JDBC_URL",
-								"value": "jdbc:postgresql://postgresql.test.svc:5432/project-burndown"
+								"value": "jdbc:postgresql://postgresql.test.svc:5432/test-project-burndown"
 							},
 							{
 								"name": "JAEGER_SAMPLER_TYPE",

@@ -23,7 +23,7 @@ node("maven") {
 
 	stage("container tests") {
 		withEnv(
-			[	"PROJECT_BURNDOWN_REPOSITORY_JDBC_URL=jdbc:postgresql://postgresql.${project}.svc:5432/${microservice}", 
+			[	"PROJECT_BURNDOWN_REPOSITORY_JDBC_URL=jdbc:postgresql://postgresql.${project}.svc:5432/${project}-${microservice}", 
 				"PROJECT_BURNDOWN_REPOSITORY_DB_USER=postgres", 
 				"PROJECT_BURNDOWN_REPOSITORY_DB_PASSWORD=welcome1",
 				"PROJECT_BURNDOWN_SERVICE_URI=http://${microservice}.${project}.svc:8080",
