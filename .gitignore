@@ -1,4 +1,7 @@
 /target/
+/.settings/
+/.classpath
+/.project
 /src/main/java/META-INF
 /.springBeans
 /release-pipeline.groovy.bak
