@@ -120,7 +120,7 @@
 			</build>
 		</profile>		
 		<profile>
-			<id>prepare-db</id>
+			<id>create-db</id>
 			<build>
 				<plugins>
 					<plugin>
