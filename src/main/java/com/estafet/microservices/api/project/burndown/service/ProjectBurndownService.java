@@ -16,7 +16,7 @@ import com.estafet.microservices.scrum.lib.commons.date.DateHelper;
 
 @Component
 public class ProjectBurndownService {
-
+	
 	@Autowired
 	private ProjectBurndownDAO projectBurndownDAO;
 

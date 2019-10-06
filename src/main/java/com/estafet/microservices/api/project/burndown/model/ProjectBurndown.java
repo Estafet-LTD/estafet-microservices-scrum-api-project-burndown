@@ -38,6 +38,9 @@ public class ProjectBurndown {
 	@JsonIgnore
 	@Column(name = "INITIAL_POINTS_TOTAL", nullable = false)
 	private Integer initialPointsTotal = 0;
+	
+	@Transient
+	private String version;
 
 	@Transient
 	private Integer noSprints;
@@ -157,6 +160,10 @@ public class ProjectBurndown {
 		return sprintLengthDays;
 	}
 
+	public String getVersion() {
+		return version;
+	}
+
 	private ProjectBurndownSprint getSprint(Integer sprintNumber) {
 		for (ProjectBurndownSprint sprint : sprints) {
 			if (sprint.getNumber().equals(sprintNumber)) {
@@ -207,13 +214,14 @@ public class ProjectBurndown {
 		}
 	}
 
-	public static ProjectBurndown getAPI() {
+	public static ProjectBurndown getAPI(String version) {
 		ProjectBurndown projectBurndown = new ProjectBurndown();
 		projectBurndown.id = 1;
 		projectBurndown.title = "my project";
 		projectBurndown.noSprints = 1;
 		projectBurndown.sprintLengthDays= 5;
 		projectBurndown.initialPointsTotal = 20;
+		projectBurndown.version = API.getVersion(version);
 		projectBurndown.update(ProjectBurndownSprint.getAPI());
 		return projectBurndown;
 	}
