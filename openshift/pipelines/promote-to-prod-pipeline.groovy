@@ -62,7 +62,7 @@ boolean isLatestVersionDeployed(project, microservice, version) {
 	return imageStreamHash.equals(podImageHash)
 }
 
-node {
+node("maven") {
 	
 	def project
 	def version
