@@ -74,12 +74,6 @@ node {
 	  ])
 	])
 	
-	stage("ensure the exists database") {
-		withMaven(mavenSettingsConfig: 'microservices-scrum') {
-	      sh "mvn clean package -P create-db -Dmaven.test.skip=true -Dproject=${project}"
-	    } 
-	}	
-	
 	stage("determine the environment to deploy to") {
 		sh "oc get route -o json -n live > route.json"
 		def route = readFile('route.json')
@@ -97,6 +91,12 @@ node {
       userRemoteConfigs: [[url: "https://github.com/${params.GITHUB}/estafet-microservices-scrum-basic-ui"]], 
       branches: [[name: "refs/tags/${version}"]]], changelog: false, poll: false
 	}
+	
+	stage("ensure the exists database") {
+		withMaven(mavenSettingsConfig: 'microservices-scrum') {
+	      sh "mvn clean package -P create-db -Dmaven.test.skip=true -Dproject=${project}"
+	    } 
+	}		
 	
 	stage("create deployment config") {
 		sh "oc process -n ${project} -f openshift/templates/${microservice}-config.yml -p NAMESPACE=${project} -p DOCKER_NAMESPACE=staging -p DOCKER_IMAGE_LABEL=${version} | oc apply -f -"
