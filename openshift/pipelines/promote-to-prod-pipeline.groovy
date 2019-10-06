@@ -88,7 +88,7 @@ node("maven") {
 	
 	stage("checkout release version") {
 		checkout scm: [$class: 'GitSCM', 
-      userRemoteConfigs: [[url: "https://github.com/${params.GITHUB}/estafet-microservices-scrum-basic-ui"]], 
+      userRemoteConfigs: [[url: "https://github.com/${params.GITHUB}/estafet-microservices-scrum-api-project-burndown"]], 
       branches: [[name: "refs/tags/${version}"]]], changelog: false, poll: false
 	}
 	
