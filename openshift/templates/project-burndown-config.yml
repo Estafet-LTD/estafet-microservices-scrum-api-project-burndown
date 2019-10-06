@@ -67,7 +67,7 @@ objects:
               - name: JBOSS_A_MQ_BROKER_PASSWORD
                 value: amq
               - name: JBOSS_A_MQ_BROKER_URL
-                value: 'tcp://broker-amq-tcp.${MICROSERVICE}.svc:61616'
+                value: 'tcp://broker-amq-tcp.${NAMESPACE}.svc:61616'
               - name: JBOSS_A_MQ_BROKER_USER
                 value: amq
               - name: PROJECT_BURNDOWN_REPOSITORY_DB_PASSWORD
