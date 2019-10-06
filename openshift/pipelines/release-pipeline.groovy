@@ -64,6 +64,12 @@ node('maven') {
 		}
 	}
 	
+	stage("prepare the database") {
+		withMaven(mavenSettingsConfig: 'microservices-scrum') {
+	      sh "mvn clean package -P prepare-db -Dmaven.test.skip=true -Dproject=${project}"
+	    } 
+	}	
+	
 	stage("increment version") {
 		def pom = readFile('pom.xml');
 		def matcher = new XmlSlurper().parseText(pom).version =~ /(\d+\.\d+\.)(\d+)(\-SNAPSHOT)/
