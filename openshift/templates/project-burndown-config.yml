@@ -40,6 +40,7 @@ objects:
     labels:
       app: "${ENV}${MICROSERVICE}"
       product: microservices-scrum
+      environment: ${ENV}
     name: "${ENV}${MICROSERVICE}"
     namespace: ${NAMESPACE}
   spec:
