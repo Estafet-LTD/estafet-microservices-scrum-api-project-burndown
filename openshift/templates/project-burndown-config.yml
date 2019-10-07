@@ -29,22 +29,25 @@ parameters:
 - description: Defines docker registry
   name: DOCKER_IMAGE_LABEL
   required: true  
+- description: Environment
+  name: ENV
+  required: false  
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
     creationTimestamp: null
     labels:
-      app: ${MICROSERVICE}
+      app: "${ENV}${MICROSERVICE}"
       product: microservices-scrum
-    name: ${MICROSERVICE}
+    name: "${ENV}${MICROSERVICE}"
     namespace: ${NAMESPACE}
   spec:
     replicas: 1
     revisionHistoryLimit: 10
     selector:
-      app: ${MICROSERVICE}
-      deploymentconfig: ${MICROSERVICE}
+      app: "${ENV}${MICROSERVICE}"
+      deploymentconfig: "${ENV}${MICROSERVICE}"
     strategy:
       activeDeadlineSeconds: 21600
       resources: {}
@@ -59,8 +62,8 @@ objects:
       metadata:
         creationTimestamp: null
         labels:
-          app: ${MICROSERVICE}
-          deploymentconfig: ${MICROSERVICE}
+          app: "${ENV}${MICROSERVICE}"
+          deploymentconfig: "${ENV}${MICROSERVICE}"
       spec:
         containers:
           - env:
@@ -78,7 +81,7 @@ objects:
                 value: jdbc:postgresql://postgresql.${NAMESPACE}.svc:5432/${NAMESPACE}-${MICROSERVICE}                
             image: ${DOCKER_REGISTRY}/${DOCKER_NAMESPACE}/${MICROSERVICE}:${DOCKER_IMAGE_LABEL}
             imagePullPolicy: Always
-            name: ${MICROSERVICE}
+            name: "${ENV}${MICROSERVICE}"
             ports:
               - containerPort: 8778
                 protocol: TCP
@@ -115,7 +118,7 @@ objects:
       - imageChangeParams:
           automatic: true
           containerNames:
-            - ${MICROSERVICE}
+            - "${ENV}${MICROSERVICE}"
           from:
             kind: ImageStreamTag
             name: "${MICROSERVICE}:${DOCKER_IMAGE_LABEL}"
@@ -126,8 +129,8 @@ objects:
   metadata:
     creationTimestamp: null
     labels:
-      app: ${MICROSERVICE}
-    name: ${MICROSERVICE}
+      app: "${ENV}${MICROSERVICE}"
+    name: "${ENV}${MICROSERVICE}"
     namespace: ${NAMESPACE}
   spec:
     ports:
@@ -144,8 +147,8 @@ objects:
         protocol: TCP
         targetPort: 8778
     selector:
-      app: ${MICROSERVICE}
-      deploymentconfig: ${MICROSERVICE}
+      app: "${ENV}${MICROSERVICE}"
+      deploymentconfig: "${ENV}${MICROSERVICE}"
     sessionAffinity: None
     type: ClusterIP
   status:
