@@ -9,10 +9,10 @@ def getVersions(json) {
 }
 
 @NonCPS
-def getNamespace(json) {
+def getPassive(json) {
 	def matcher = new groovy.json.JsonSlurper().parseText(json).items[0].spec.to.name =~ /(green|blue)(\-basic\-ui)/
 	String namespace = matcher[0][1]
-	return namespace.equals("green") ? "prod-blue" : "prod-green" 
+	return namespace.equals("green") ? "blue" : "green" 
 }
 
 @NonCPS
@@ -70,9 +70,11 @@ boolean isLatestVersionDeployed(project, microservice, version) {
 
 node("maven") {
 	
-	def project
-	def version
+	def project = "prod"
 	def microservice = "project-burndown"
+	def version
+	dev env
+	
 
 	properties([
 	  parameters([
@@ -81,10 +83,10 @@ node("maven") {
 	])
 	
 	stage("determine the environment to deploy to") {
-		sh "oc get route -o json -n live > route.json"
+		sh "oc get route -o json -n ${project} > route.json"
 		def route = readFile('route.json')
-		project = getNamespace(route)
-		println "the target namespace is $project"
+		env = getPassive(route)
+		println "the target environment is $env"
 	}
 	
 	stage("determine which image is to be deployed") {
@@ -105,8 +107,8 @@ node("maven") {
 	}		
 	
 	stage("create deployment config") {
-		sh "oc process -n ${project} -f openshift/templates/${microservice}-config.yml -p NAMESPACE=${project} -p DOCKER_NAMESPACE=${project} -p DOCKER_IMAGE_LABEL=${version} | oc apply -f -"
-		sh "oc set env dc/${microservice} PROJECT_BURNDOWN_REPOSITORY_JDBC_URL=jdbc:postgresql://postgresql.${project}.svc:5432/prod-${microservice} JAEGER_AGENT_HOST=jaeger-agent.${project}.svc JAEGER_SAMPLER_MANAGER_HOST_PORT=jaeger-agent.${project}.svc:5778 JAEGER_SAMPLER_PARAM=1 JAEGER_SAMPLER_TYPE=const -n ${project}"	
+		sh "oc process -n ${project} -f openshift/templates/${microservice}-config.yml -p NAMESPACE=${project} -p ENV=${env} -p DOCKER_NAMESPACE=${project} -p DOCKER_IMAGE_LABEL=${version} | oc apply -f -"
+		sh "oc set env dc/${microservice} -p JBOSS_A_MQ_BROKER_URL=tcp://broker-amq-tcp.mq-${env}.svc:61616 JAEGER_AGENT_HOST=jaeger-agent.${project}.svc JAEGER_SAMPLER_MANAGER_HOST_PORT=jaeger-agent.${project}.svc:5778 JAEGER_SAMPLER_PARAM=1 JAEGER_SAMPLER_TYPE=const -n ${project}"	
 	}
 	
 	stage("execute deployment") {
