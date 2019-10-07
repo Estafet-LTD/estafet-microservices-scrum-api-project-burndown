@@ -73,7 +73,7 @@ node("maven") {
 	def project = "prod"
 	def microservice = "project-burndown"
 	def version
-	dev env
+	def env
 	
 
 	properties([
