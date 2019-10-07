@@ -40,7 +40,7 @@ def recentVersion( versions ) {
 	return versions[size-1]
 }
 
-def getLatestVersion(microservice) {
+def getLatestVersion(project, microservice) {
 	sh "oc get is ${microservice} -o json -n ${project} > image.json"
 	def image = readFile('image.json')
 	def versions = getVersions(image)
@@ -74,7 +74,6 @@ node("maven") {
 	def microservice = "project-burndown"
 	def version
 	def env
-	
 
 	properties([
 	  parameters([
@@ -90,7 +89,7 @@ node("maven") {
 	}
 	
 	stage("determine which image is to be deployed") {
-		version = getLatestVersion microservice
+		version = getLatestVersion project, microservice
 		println "latest version is $version"
 	}
 	
@@ -108,13 +107,13 @@ node("maven") {
 	
 	stage("create deployment config") {
 		sh "oc process -n ${project} -f openshift/templates/${microservice}-config.yml -p NAMESPACE=${project} -p ENV=${env} -p DOCKER_NAMESPACE=${project} -p DOCKER_IMAGE_LABEL=${version} | oc apply -f -"
-		sh "oc set env dc/${microservice} -p JBOSS_A_MQ_BROKER_URL=tcp://broker-amq-tcp.mq-${env}.svc:61616 JAEGER_AGENT_HOST=jaeger-agent.${project}.svc JAEGER_SAMPLER_MANAGER_HOST_PORT=jaeger-agent.${project}.svc:5778 JAEGER_SAMPLER_PARAM=1 JAEGER_SAMPLER_TYPE=const -n ${project}"	
+		sh "oc set env dc/${env}${microservice} -p JBOSS_A_MQ_BROKER_URL=tcp://broker-amq-tcp.mq-${env}.svc:61616 JAEGER_AGENT_HOST=jaeger-agent.${project}.svc JAEGER_SAMPLER_MANAGER_HOST_PORT=jaeger-agent.${project}.svc:5778 JAEGER_SAMPLER_PARAM=1 JAEGER_SAMPLER_TYPE=const -n ${project}"	
 	}
 	
 	stage("execute deployment") {
 		if (!isLatestVersionDeployed(project, microservice, version)) {
-			openshiftDeploy namespace: project, depCfg: microservice,  waitTime: "3000000"
-			openshiftVerifyDeployment namespace: project, depCfg: microservice, replicaCount:"1", verifyReplicaCount: "true", waitTime: "300000" 
+			openshiftDeploy namespace: project, depCfg: "${env}${microservice}",  waitTime: "3000000"
+			openshiftVerifyDeployment namespace: project, depCfg: "${env}${microservice}", replicaCount:"1", verifyReplicaCount: "true", waitTime: "300000" 
 		} else {
 			println "version $version of $microservice is already deployed and running"
 		}
