@@ -131,6 +131,7 @@ objects:
     creationTimestamp: null
     labels:
       app: "${ENV}${MICROSERVICE}"
+      product: microservices-scrum
     name: "${ENV}${MICROSERVICE}"
     namespace: ${NAMESPACE}
   spec:
