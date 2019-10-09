@@ -110,6 +110,11 @@ node('maven') {
 	stage("promote image") {
 		openshiftTag namespace: project, srcStream: microservice, srcTag: releaseVersion, destinationNamespace: 'prod', destinationStream: microservice, destinationTag: releaseVersion
 	}	
+	
+	stage("flag this microservice as untested") {
+		println "The tests passed successfully"
+		sh "oc patch dc/${microservice} -p '{\"metadata\":{\"labels\":{\"testStatus\":\"passed\"}}}' -n ${project}"		
+	}
 
 }
 
