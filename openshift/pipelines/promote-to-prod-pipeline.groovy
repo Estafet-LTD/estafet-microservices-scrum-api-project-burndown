@@ -68,7 +68,7 @@ node("maven") {
 		def test = readFile('test.json')
 		testStatus = getTestStatus(test)
 		println "the target environment test status is $testStatus"
-		if (testStatus.equals("false") error("Cannot promote $env microservices live as they have not been passed tested")
+		if (testStatus.equals("false")) error("Cannot promote $env microservices live as they have not been passed tested")
 	}		
 	
 	stage("determine which image is to be deployed") {
