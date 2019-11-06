@@ -25,4 +25,8 @@ public class ProjectBurndownDAO {
 		entityManager.merge(projectBurndown);
 	}
 
+	public int deleteAll() {
+		return entityManager.createQuery("DELETE FROM ProjectBurndown").executeUpdate();
+	}
+	
 }
