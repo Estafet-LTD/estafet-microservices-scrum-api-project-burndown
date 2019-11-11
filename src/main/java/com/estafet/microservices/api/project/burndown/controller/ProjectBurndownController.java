@@ -30,7 +30,7 @@ public class ProjectBurndownController {
 		return projectBurndownService.getProjectBurndown(id);
 	}
 	
-	@DeleteMapping("/project/all/burndown")
+	//@DeleteMapping("/project/all/burndown")
 	public Deleted deleteAll() {
 		return projectBurndownService.deleteAll();
 	}
