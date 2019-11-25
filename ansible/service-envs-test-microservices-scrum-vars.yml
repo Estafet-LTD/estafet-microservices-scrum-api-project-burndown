@@ -1,3 +1,0 @@
----
-
-- set_fact: service_envs="-e JAEGER_SAMPLER_TYPE=const -e JAEGER_SAMPLER_PARAM=1 -e JAEGER_SAMPLER_MANAGER_HOST_PORT=jaeger-agent.{{ project }}.svc:5778 -e JAEGER_AGENT_HOST=jaeger-agent.{{ project }}.svc"
