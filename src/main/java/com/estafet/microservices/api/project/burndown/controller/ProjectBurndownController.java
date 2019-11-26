@@ -11,6 +11,8 @@ import com.estafet.microservices.api.project.burndown.messages.Deleted;
 import com.estafet.microservices.api.project.burndown.model.ProjectBurndown;
 import com.estafet.microservices.api.project.burndown.service.ProjectBurndownService;
 
+import io.opentracing.Tracer;
+
 @RestController
 public class ProjectBurndownController {
 
@@ -18,10 +20,14 @@ public class ProjectBurndownController {
 	private String appVersion;
 	
 	@Autowired
+	private Tracer tracer;
+	
+	@Autowired
 	private ProjectBurndownService projectBurndownService;
 	
 	@GetMapping("/api")
 	public ProjectBurndown getAPI() {
+		tracer.activeSpan().deactivate();
 		return ProjectBurndown.getAPI(appVersion);
 	}
 	
