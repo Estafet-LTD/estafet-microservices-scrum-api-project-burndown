@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.estafet.microservices.scrum</groupId>
 		<artifactId>microservices-scrum-parent-db</artifactId>
-		<version>1.0.4</version>
+		<version>1.0.6</version>
 		<relativePath />
 	</parent>
 
@@ -15,165 +15,6 @@
 		<microservice>project-burndown</microservice>
 		<entity.package>com.estafet.microservices.api.project.burndown.model</entity.package>
 	</properties>
-
-	<profiles>
-		<profile>
-			<id>releases</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-release-plugin</artifactId>
-						<configuration>
-							<tagNameFormat>v@{project.version}</tagNameFormat>
-							<autoVersionSubmodules>true</autoVersionSubmodules>
-							<releaseProfiles>releases</releaseProfiles>
-						</configuration>
-					</plugin>
-					<plugin>
-						<groupId>org.sonatype.plugins</groupId>
-						<artifactId>nexus-staging-maven-plugin</artifactId>
-						<version>1.5.1</version>
-						<executions>
-							<execution>
-								<id>default-deploy</id>
-								<phase>deploy</phase>
-								<goals>
-									<goal>deploy</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<serverId>nexus-releases</serverId>
-							<nexusUrl>http://nexus.cicd.svc:8081/nexus/</nexusUrl>
-							<skipStaging>true</skipStaging>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>			
-		<profile>
-			<id>prepare-db</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>sql-maven-plugin</artifactId>
-						<version>1.5</version>
-						<dependencies>
-							<dependency>
-								<groupId>org.postgresql</groupId>
-								<artifactId>postgresql</artifactId>
-								<version>9.4.1212.jre7</version>
-							</dependency>
-						</dependencies>
-						<configuration>
-							<driver>org.postgresql.Driver</driver>
-							<url>jdbc:postgresql://postgresql.${project}.svc:5432/${project}-${microservice}</url>
-							<username>postgres</username>
-							<password>welcome1</password>
-						</configuration>
-						<executions>
-							<execution>
-								<id>create-db</id>
-								<phase>process-test-resources</phase>
-								<goals>
-									<goal>execute</goal>
-								</goals>
-								<configuration>
-									<!-- need another database to create the targeted one -->
-									<url>jdbc:postgresql://postgresql.${project}.svc:5432/postgres</url>
-									<autocommit>true</autocommit>
-									<sqlCommand>CREATE DATABASE "${project}-${microservice}"</sqlCommand>
-									<!-- ignore error when database is not available -->
-									<onError>continue</onError>
-								</configuration>
-							</execution>
-							<execution>
-								<id>drop-liquibase-changelog</id>
-								<phase>process-test-resources</phase>
-								<goals>
-									<goal>execute</goal>
-								</goals>
-								<configuration>
-									<autocommit>true</autocommit>
-									<sqlCommand>DROP TABLE IF EXISTS DATABASECHANGELOG</sqlCommand>
-									<sqlCommand>DROP TABLE IF EXISTS DATABASECHANGELOGLOCK</sqlCommand>
-								</configuration>
-							</execution>
-							<execution>
-								<id>drop-schema</id>
-								<phase>process-test-resources</phase>
-								<goals>
-									<goal>execute</goal>
-								</goals>
-								<configuration>
-									<autocommit>true</autocommit>
-									<srcFiles>
-										<srcFile>ddl/drop-${microservice}-db.ddl</srcFile>
-									</srcFiles>
-									<onError>continue</onError>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>		
-		<profile>
-			<id>create-prod-db</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>sql-maven-plugin</artifactId>
-						<version>1.5</version>
-						<dependencies>
-							<dependency>
-								<groupId>org.postgresql</groupId>
-								<artifactId>postgresql</artifactId>
-								<version>9.4.1212.jre7</version>
-							</dependency>
-						</dependencies>
-						<configuration>
-							<driver>org.postgresql.Driver</driver>
-							<url>jdbc:postgresql://postgresql.${project}.svc:5432/prod-${microservice}</url>
-							<username>postgres</username>
-							<password>welcome1</password>
-						</configuration>
-						<executions>
-							<execution>
-								<id>create-db</id>
-								<phase>process-test-resources</phase>
-								<goals>
-									<goal>execute</goal>
-								</goals>
-								<configuration>
-									<!-- need another database to create the targeted one -->
-									<url>jdbc:postgresql://postgresql.${project}.svc:5432/postgres</url>
-									<autocommit>true</autocommit>
-									<sqlCommand>CREATE DATABASE "prod-${microservice}"</sqlCommand>
-									<!-- ignore error when database is not available -->
-									<onError>continue</onError>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>				
-	</profiles>
-
-	<distributionManagement>
-		<snapshotRepository>
-			<id>nexus-snapshots</id>
-			<url>http://nexus.cicd.svc:8081/nexus/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>nexus-releases</id>
-			<url>http://nexus.cicd.svc:8081/nexus/content/repositories/releases</url>
-		</repository>
-	</distributionManagement>
 
 	<scm>
 		<connection>scm:git:https://github.com/Estafet-LTD/estafet-microservices-scrum-api-project-burndown.git</connection>
@@ -185,7 +26,7 @@
 		<dependency>
 			<groupId>com.estafet.microservices.scrum</groupId>
 			<artifactId>microservices-scrum-commons-lib</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.3</version>
 		</dependency>
 	</dependencies>
 </project>

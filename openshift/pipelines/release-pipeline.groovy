@@ -37,17 +37,17 @@ def getLatestVersion(microservice) {
 
 node('maven') {
 
-	def project = "test"
+	properties([
+	  parameters([
+	     string(name: 'GITHUB'), string(name: 'PRODUCT'),
+	  ])
+	])
+
+	def project = "${params.PRODUCT}-test"
 	def microservice = "project-burndown"
 
 	def developmentVersion
 	def releaseVersion
-
-	properties([
-	  parameters([
-	     string(name: 'GITHUB'),
-	  ])
-	])
 
 	stage("checkout") {
 		git branch: "master", url: "https://${username()}:${password()}@github.com/${params.GITHUB}/estafet-microservices-scrum-api-project-burndown"
@@ -89,7 +89,7 @@ node('maven') {
 	}	
 
 	stage("create build config") {
-			sh "oc process -n ${project} -f openshift/templates/${microservice}-build-config.yml -p NAMESPACE=${project} -p GITHUB=${params.GITHUB} -p SOURCE_REPOSITORY_REF=${releaseVersion} -p DOCKER_IMAGE_LABEL=${releaseVersion} | oc apply -f -"
+			sh "oc process -n ${project} -f openshift/templates/${microservice}-build-config.yml -p NAMESPACE=${project} -p GITHUB=${params.GITHUB} -p SOURCE_REPOSITORY_REF=${releaseVersion} -p DOCKER_IMAGE_LABEL=${releaseVersion} -p PRODUCT=${params.PRODUCT} | oc apply -f -"
 	}
 
 	stage("execute build") {
@@ -98,7 +98,7 @@ node('maven') {
 	}
 
 	stage("create deployment config") {
-		sh "oc process -n ${project} -f openshift/templates/${microservice}-config.yml -p NAMESPACE=${project} -p DOCKER_NAMESPACE=${project} -p DOCKER_IMAGE_LABEL=${releaseVersion} | oc apply -f -"
+		sh "oc process -n ${project} -f openshift/templates/${microservice}-config.yml -p NAMESPACE=${project} -p DOCKER_NAMESPACE=${project} -p DOCKER_IMAGE_LABEL=${releaseVersion} -p PRODUCT=${params.PRODUCT} | oc apply -f -"
 		sh "oc set env dc/${microservice} JAEGER_AGENT_HOST=jaeger-agent.${project}.svc JAEGER_SAMPLER_MANAGER_HOST_PORT=jaeger-agent.${project}.svc:5778 JAEGER_SAMPLER_PARAM=1 JAEGER_SAMPLER_TYPE=const -n ${project}"
 	}
 	
@@ -108,7 +108,7 @@ node('maven') {
 	}
 
 	stage("promote image") {
-		openshiftTag namespace: project, srcStream: microservice, srcTag: releaseVersion, destinationNamespace: 'prod', destinationStream: microservice, destinationTag: releaseVersion
+		openshiftTag namespace: project, srcStream: microservice, srcTag: releaseVersion, destinationNamespace: "${params.PRODUCT}-prod", destinationStream: microservice, destinationTag: releaseVersion
 	}	
 	
 	stage("flag this microservice as untested") {
