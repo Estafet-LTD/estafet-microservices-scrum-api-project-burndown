@@ -1,0 +1,12 @@
+- build:
+    db: true
+    mq: true
+    wiremock: false
+    promote: true    
+    tests: true    
+- release:
+    db: true
+- promote:
+    db: true
+    mq: true
+    expose: false
