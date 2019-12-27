@@ -7,13 +7,8 @@
       http://www.springframework.org/schema/tx 
       http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
 
-	<bean id="myProperties"
-	      class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-	  <property name="locations">
-	    <list>
-	      <value>classpath*:integration-test.properties</value>
-	    </list>
-	  </property>
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    	<property name="locations" value="classpath:integration-test.properties"/>
 	</bean>
 
 	<bean id="myEmf"
