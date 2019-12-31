@@ -5,9 +5,9 @@
 	<name>estafet-microservices-scrum-api-project-burndown</name>
 	
 	<parent>
-		<groupId>com.estafet.microservices.scrum</groupId>
-		<artifactId>microservices-scrum-parent-db</artifactId>
-		<version>1.0.7</version>
+		<groupId>com.estafet.openshift.boost</groupId>
+		<artifactId>estafet-openshift-boost-springboot-db</artifactId>
+		<version>1.0.0</version>
 		<relativePath />
 	</parent>
 
