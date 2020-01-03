@@ -83,7 +83,15 @@ objects:
               - name: PROJECT_BURNDOWN_REPOSITORY_DB_USER
                 value: postgres
               - name: PROJECT_BURNDOWN_REPOSITORY_JDBC_URL
-                value: jdbc:postgresql://postgresql.${NAMESPACE}.svc:5432/${NAMESPACE}-${MICROSERVICE}                
+                value: jdbc:postgresql://postgresql.${NAMESPACE}.svc:5432/${NAMESPACE}-${MICROSERVICE}
+              - name: JAEGER_SAMPLER_TYPE
+                value: const
+              - name: JAEGER_SAMPLER_PARAM
+                value: 1                
+              - name: JAEGER_SAMPLER_MANAGER_HOST_PORT
+                value: jaeger-agent.${NAMESPACE}.svc:5778
+              - name: JAEGER_AGENT_HOST
+                value: jaeger-agent.${NAMESPACE}.svc                                   
             image: ${DOCKER_REGISTRY}/${DOCKER_NAMESPACE}/${MICROSERVICE}:${DOCKER_IMAGE_LABEL}
             imagePullPolicy: Always
             name: "${ENV}${MICROSERVICE}"
