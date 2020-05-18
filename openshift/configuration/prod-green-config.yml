@@ -4,7 +4,7 @@ config_map:
   - name: PROJECT_BURNDOWN_REPOSITORY_JDBC_URL
     value: jdbc:postgresql://postgresql.{{ product.name }}-database.svc:5432/{{ project }}-{{ microservice.name }}
   - name: JAEGER_SERVICE_NAME
-    value: test-{{ microservice.name }}
+    value: green-{{ microservice.name }}
   - name: JAEGER_SAMPLER_TYPE
     value: const
   - name: JAEGER_SAMPLER_PARAM
