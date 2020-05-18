@@ -1,0 +1,5 @@
+setup:
+  - name: create-postgres-db
+    app: project-burndown
+    repo: estafet-microservices-scrum-api-project-burndown
+    reset_db: true

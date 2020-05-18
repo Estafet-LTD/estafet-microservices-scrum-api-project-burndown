@@ -1,0 +1,15 @@
+config_map:
+  - name: JBOSS_A_MQ_BROKER_URL
+    value: tcp://broker-amq-tcp.{{ project }}.svc:61616
+  - name: PROJECT_API_JDBC_URL
+    value: jdbc:postgresql://postgresql.{{ product.name }}.svc:5432/{{ project }}-{{ microservice.name }}
+  - name: JAEGER_SERVICE_NAME
+    value: {{ microservice.name }}
+  - name: JAEGER_SAMPLER_TYPE
+    value: const
+  - name: JAEGER_SAMPLER_PARAM
+    value: 1
+  - name: JAEGER_SAMPLER_MANAGER_HOST_PORT
+    value: jaeger-agent.{{ project }}.svc:5778    
+  - name: JAEGER_AGENT_HOST
+    value: jaeger-agent.{{ product.name }}.svc      
