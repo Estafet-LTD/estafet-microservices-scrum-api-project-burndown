@@ -1,6 +1,6 @@
 config_map:
   - name: JBOSS_A_MQ_BROKER_URL
-    value: tcp://{{ microservice.name }}-amq-tcp.{{ project }}.svc:61616
+    value: tcp://broker-amq-tcp.ms-scrum-mq-blue.svc:61616
   - name: PROJECT_BURNDOWN_REPOSITORY_JDBC_URL
     value: jdbc:postgresql://postgresql.{{ product.name }}-database.svc:5432/{{ project }}-{{ microservice.name }}
   - name: JAEGER_SERVICE_NAME
