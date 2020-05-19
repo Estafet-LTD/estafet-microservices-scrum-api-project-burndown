@@ -7,6 +7,6 @@ setup:
     reset_db: true
 
   - name: amq-setup
-    application_name: {{ microservice.name }}
+    application_name: "{{ microservice.name }}"
     amq_user: amq
     amq_password: amq
